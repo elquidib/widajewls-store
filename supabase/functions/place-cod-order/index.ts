@@ -116,7 +116,7 @@ Deno.serve(async (req) => {
 
   const result = Array.isArray(data) ? data[0] : data;
   const metaToken = Deno.env.get("META_CAPI_ACCESS_TOKEN");
-  const metaPixelId = Deno.env.get("META_PIXEL_ID") || "2334047827334740";
+  const metaPixelId = Deno.env.get("META_PIXEL_ID") || "";
   const purchaseEventId = String(body.purchase_event_id || "").trim();
 
   async function sendMetaPurchase() {
