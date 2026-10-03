@@ -375,7 +375,7 @@ return `<div class="topbar"><span class="topbar-message">${esc(localizedAnnounce
   <div class="menu-divider"></div>
   <button type="button" onclick="closeMobileMenu();setTimeout(()=>document.getElementById('contact')?.scrollIntoView({behavior:'smooth',block:'start'}),80)">Contact</button>
 </div>
-<a class="logo" href="#/" onclick="home();return false" data-brand-name="true">${siteSettings.logo_url?`<img src="${esc(siteSettings.logo_url)}" alt="${esc(WIDAJEWLS_BRAND_NAME)}" style="height:38px;max-width:170px;object-fit:contain">`:`<span class="logo-wordmark"><span>TATTO</span><span class="logo-star" aria-hidden="true">✦</span><span>JEWLS</span></span>`}</a>
+<a class="logo" href="#/" onclick="home();return false" data-brand-name="true">${siteSettings.logo_url?`<img src="${esc(siteSettings.logo_url)}" alt="${esc(WIDAJEWLS_BRAND_NAME)}" style="height:38px;max-width:170px;object-fit:contain">`:`<span class="logo-wordmark"><span>WIDA</span><span class="logo-star" aria-hidden="true">✦</span><span>JEWLS</span></span>`}</a>
 <div class="actions"><button class="iconbtn" onclick="openCart()" aria-label="Cart">🛒<span class="badge" id="cartBadge">${cartCount()}</span></button></div>
 </nav></header>${((location.hash.replace(/^#/,'')||'/')==='/')?languageSwitcher():''}`;
 }
