@@ -1,0 +1,3 @@
+-- Wida Jewls initial schema is applied to Supabase project hfxxcuqjlmivhidmhqva.
+-- This file is intentionally kept as a deployment marker; the remote schema was created
+-- from the equivalent SQL before the production hardening migrations.
