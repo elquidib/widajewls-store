@@ -1,0 +1,104 @@
+name: Wida Jewls validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Extract and syntax-check storefront JavaScript
+        run: |
+          python - <<'PY'
+          import re
+          from pathlib import Path
+          html=Path("index.html").read_text()
+          scripts=re.findall(r"<script(?:\s[^>]*)?>([\s\S]*?)</script>",html,re.I)
+          inline=[s for s in scripts if "function render()" in s]
+          assert inline, "Storefront inline script not found"
+          Path("/tmp/storefront.js").write_text(inline[-1])
+          PY
+          node --check /tmp/storefront.js
+
+      - name: Extract and syntax-check admin JavaScript
+        run: |
+          python - <<'PY'
+          import re
+          from pathlib import Path
+          html=Path("admin/index.html").read_text()
+          scripts=re.findall(r"<script(?:\s[^>]*)?>([\s\S]*?)</script>",html,re.I)
+          inline=[s for s in scripts if "function start()" in s]
+          assert inline, "Admin inline script not found"
+          Path("/tmp/admin.js").write_text(inline[-1])
+          PY
+          node --check /tmp/admin.js
+
+      - name: Run admin smoke assertions
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          html=Path("admin/index.html").read_text()
+          required=[
+            "async function isAdmin()",
+            "async function loadProducts()",
+            "async function loadOrders()",
+            "async function loadCustomers()",
+            "async function loadReviews()",
+            "async function loadDiscounts()",
+            "async function saveDiscount()",
+            "async function saveOrderStatus(",
+            "products.map(p=>'<option value="'+p.id",
+            "db.auth.onAuthStateChange",
+          ]
+          for item in required:
+            assert item in html, f"Missing admin requirement: {item}"
+          assert "p.dbId" not in html, "Stale product identifier binding remains in admin"
+          print("Admin smoke checks passed")
+          PY
+
+      - name: Run storefront smoke assertions
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          html=Path("index.html").read_text()
+          required=[
+            'function buyNow(id)',
+            'function goCheckout()',
+            'function goToSection(id)',
+            'id="shop"',
+            'id="faq"',
+            'id="care"',
+            'id="trust"',
+            'id="turnstileWidget"',
+            'place-cod-order',
+          ]
+          for item in required:
+            assert item in html, f"Missing required storefront feature: {item}"
+          assert 'href="#shop"' not in html, "Unhandled #shop navigation remains"
+          assert 'href="#faq"' not in html, "Unhandled #faq navigation remains"
+          print("Storefront smoke checks passed")
+          PY
+
+      - name: Validate Cloudflare headers
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          headers=Path("_headers").read_text()
+          required=[
+            "X-Content-Type-Options: nosniff",
+            "Referrer-Policy: strict-origin-when-cross-origin",
+            "Permissions-Policy: camera=(), microphone=(), geolocation=()",
+            "Cache-Control: public, max-age=31536000, immutable",
+          ]
+          for item in required:
+            assert item in headers, f"Missing header: {item}"
+          print("Cloudflare header checks passed")
+          PY
