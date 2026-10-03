@@ -1,0 +1,1 @@
+window.TURNSTILE_SITE_KEY="";
