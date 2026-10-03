@@ -589,7 +589,7 @@ function updateSEO(){
   const base="https://widajewls.com";
   const p=path.startsWith("/product/")?products.find(x=>x.id===Number(path.split("/")[2])):null;
   const title=p?(String(p.name)+" — Wida Jewls"):"Wida Jewls — Jewelry";
-  const desc=p?String(p.desc||"Jewelry design.").slice(0,155):"Premium jewelrys in Morocco. Express your style. Cash on delivery across Morocco.";
+  const desc=p?String(p.desc||"Jewelry design.").slice(0,155):"Premium jewelry in Morocco. Express your style. Cash on delivery across Morocco.";
   document.title=title;
   const setMeta=(selector,attrs,value)=>{let el=document.querySelector(selector);if(!el){el=document.createElement("meta");Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));document.head.appendChild(el)}el.setAttribute("content",value)};
   setMeta('meta[name="description"]',{name:"description"},desc);
