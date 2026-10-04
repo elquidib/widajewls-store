@@ -470,6 +470,174 @@ button,input,select,textarea{font-family:"Montserrat","DM Sans",system-ui,sans-s
   .story-item{font-size:9.5px}
 }
 </style>
+<style id="widajewls-mobile-readability-fix">
+/* WIDA JEWLS — MOBILE READABILITY + EDITORIAL SPACING FIX
+   Visual-only correction. No storefront, checkout, Supabase, admin, or feature logic changed.
+*/
+@media (max-width:800px){
+  /* Remove the large empty hero when no hero image has been configured. */
+  .hero:not(.has-image){
+    min-height:auto;
+    background:var(--paper);
+  }
+  .hero:not(.has-image) .hero-inner{
+    align-self:start;
+    padding:58px 22px 72px;
+  }
+  .hero:not(.has-image) .eyebrow{
+    font-size:11px;
+    line-height:1.4;
+    letter-spacing:.16em;
+  }
+  .hero:not(.has-image) h1{
+    font-size:58px;
+    line-height:.9;
+    margin:18px 0 22px;
+  }
+  .hero:not(.has-image) p{
+    max-width:520px;
+    font-size:16px;
+    line-height:1.65;
+    margin-bottom:28px;
+  }
+
+  /* Story becomes a proper full-width editorial section instead of a cramped split. */
+  .story-inner{
+    grid-template-columns:1fr;
+  }
+  .story-copy{
+    padding:58px 22px 52px;
+  }
+  .story .eyebrow{
+    font-size:10px;
+    line-height:1.4;
+    letter-spacing:.18em;
+    white-space:normal;
+  }
+  .story h2{
+    font-size:48px;
+    line-height:.92;
+    margin:12px 0 22px;
+    max-width:680px;
+  }
+  .story p{
+    font-size:17px;
+    line-height:1.65;
+    max-width:680px;
+  }
+  .story-list{
+    margin-top:34px;
+  }
+  .story-item{
+    padding:17px 0;
+    gap:14px;
+    font-size:15px;
+    line-height:1.45;
+  }
+  .story-num{
+    flex:0 0 28px;
+    min-width:28px;
+    font-size:10px;
+  }
+  .story-visual{
+    min-height:0;
+    aspect-ratio:4/3;
+    width:100%;
+  }
+  /* If no story image exists, don't show an empty block. */
+  .story[data-story-desktop=""] .story-visual{
+    display:none;
+  }
+
+  /* Make general mobile copy comfortably readable. */
+  .section{
+    padding:72px 20px;
+  }
+  .section-head{
+    margin-bottom:30px;
+  }
+  .section-head h2{
+    font-size:50px;
+  }
+  .section-head p{
+    font-size:16px;
+    line-height:1.65;
+  }
+  .kicker{
+    font-size:10px;
+    letter-spacing:.2em;
+  }
+  .trust div{
+    font-size:10px;
+    line-height:1.45;
+    padding:18px 12px;
+  }
+  .trust span{
+    font-size:12px;
+    line-height:1.45;
+  }
+  .card-title{
+    font-size:24px;
+  }
+  .meta{
+    font-size:9px;
+  }
+  .price{
+    font-size:15px;
+  }
+
+  /* FAQ readability. */
+  .faq details{
+    padding:25px 0;
+  }
+  .faq summary{
+    font-size:24px;
+    line-height:1.2;
+    gap:18px;
+  }
+  .faq p{
+    font-size:16px;
+    line-height:1.7;
+    margin-top:14px;
+  }
+
+  /* Keep the language control compact while preserving its function. */
+  .language-trigger{
+    width:82px;
+    height:48px;
+  }
+}
+
+@media (max-width:430px){
+  .hero:not(.has-image) .hero-inner{
+    padding:50px 20px 62px;
+  }
+  .hero:not(.has-image) h1{
+    font-size:52px;
+  }
+  .hero:not(.has-image) p{
+    font-size:16px;
+  }
+  .story-copy{
+    padding:52px 20px 46px;
+  }
+  .story h2{
+    font-size:44px;
+  }
+  .story p{
+    font-size:16px;
+  }
+  .story-item{
+    font-size:15px;
+  }
+  .section-head h2{
+    font-size:46px;
+  }
+  .faq summary{
+    font-size:22px;
+  }
+}
+</style>
 </head>
 <body>
 <div id="app"></div>
