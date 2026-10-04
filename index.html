@@ -103,6 +103,289 @@ body.cart-open .language-switcher{display:none!important}
 }
 
 </style>
+<style id="widajewls-luxury-direction">
+/* WIDA JEWLS — luxury jewelry visual direction
+   Design-only layer: preserves all storefront logic, checkout, Supabase, analytics and admin behavior.
+*/
+:root{
+  --ink:#211A16;
+  --ink2:#2B211B;
+  --paper:#F7F2E9;
+  --paper2:#EEE5D6;
+  --line:#D9CCB8;
+  --muted:#75695C;
+  --white:#FFFDF8;
+  --gold:#B8945A;
+  --gold-light:#D2B47A;
+  --rose:#A77B68;
+  --shadow:0 18px 50px rgba(55,39,25,.08);
+  --radius:2px;
+}
+html,body,#app{background:var(--paper);color:var(--ink)}
+body{font-family:"Montserrat","DM Sans",system-ui,sans-serif;font-weight:400}
+button,input,select,textarea{font-family:"Montserrat","DM Sans",system-ui,sans-serif}
+.topbar{
+  background:var(--ink2);
+  color:var(--gold-light);
+  min-height:36px;
+  padding:9px 14px;
+  font-size:9px;
+  letter-spacing:.22em;
+  font-weight:600;
+}
+.header{
+  background:rgba(247,242,233,.96);
+  border-bottom:1px solid rgba(185,148,90,.28);
+  backdrop-filter:blur(12px);
+}
+.nav{height:82px;max-width:1320px;padding:0 30px}
+.navlinks{gap:28px;font-size:10px;letter-spacing:.18em;font-weight:600;color:#51463C}
+.logo{
+  font-family:"Cormorant Garamond","Playfair Display",serif;
+  font-size:36px;
+  font-weight:600;
+  letter-spacing:.22em;
+  color:var(--ink);
+}
+.logo-star{color:var(--gold);font-size:15px;transform:translateY(-10px)}
+.actions{gap:7px}
+.iconbtn{
+  width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--line);background:transparent;
+}
+.iconbtn:hover{border-color:var(--gold);background:rgba(184,148,90,.08)}
+.badge{background:var(--gold);border-color:var(--paper);color:var(--ink)!important}
+.mobile-menu-panel{
+  background:rgba(247,242,233,.99);
+  border:1px solid var(--line);
+  border-radius:2px;
+  box-shadow:0 18px 45px rgba(55,39,25,.12);
+}
+.mobile-menu-panel button{border-radius:0;font-size:10px;letter-spacing:.16em}
+.mobile-menu-panel button:hover{background:var(--paper2)}
+.btn{
+  min-height:50px;
+  border-radius:2px;
+  background:var(--ink);
+  border-color:var(--ink);
+  box-shadow:none;
+  letter-spacing:.17em;
+  font-size:10px;
+}
+.btn:hover{background:var(--gold);border-color:var(--gold);color:var(--ink)!important;box-shadow:none;transform:none}
+.btn.ghost{border-color:var(--line);color:var(--ink)!important}
+.btn.ghost:hover{background:var(--gold);border-color:var(--gold);color:var(--ink)!important;box-shadow:none}
+.hero{
+  min-height:700px;
+  background:var(--paper);
+  color:var(--ink);
+}
+.hero.has-image{background:#211A16;color:#fff}
+.hero:before{
+  background:linear-gradient(90deg,rgba(247,242,233,.96) 0%,rgba(247,242,233,.84) 38%,rgba(247,242,233,.22) 72%,rgba(247,242,233,.04) 100%);
+}
+.hero.has-image:before{
+  background:linear-gradient(90deg,rgba(24,18,14,.78) 0%,rgba(24,18,14,.42) 45%,rgba(24,18,14,.08) 100%);
+}
+.hero:after{background:linear-gradient(0deg,rgba(55,39,25,.06),transparent 40%)}
+.hero.has-image:after{background:linear-gradient(0deg,rgba(0,0,0,.18),transparent 40%)}
+.hero-inner{max-width:1320px;padding:90px 30px}
+.hero .eyebrow,.hero.has-image .eyebrow{color:var(--gold)}
+.hero h1{
+  font-family:"Cormorant Garamond","Playfair Display",serif;
+  font-weight:600;
+  font-size:clamp(68px,8.5vw,118px);
+  line-height:.82;
+  letter-spacing:-.035em;
+  margin:18px 0 24px;
+}
+.hero p{color:var(--muted);font-size:14px;line-height:1.85;max-width:500px}
+.hero.has-image p{color:#eee7dc}
+.hero .btn.light{
+  min-height:52px;
+  border-radius:2px;
+  background:var(--gold);
+  border-color:var(--gold);
+  color:var(--ink)!important;
+  box-shadow:none;
+  font-size:10px;
+  letter-spacing:.17em;
+}
+.hero .btn.light:hover{background:var(--ink);border-color:var(--ink);color:#fff!important;transform:none;box-shadow:none}
+.trust{
+  max-width:1320px;
+  border-left:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.trust div{
+  padding:25px 24px;
+  border-right:1px solid var(--line);
+  font-size:9px;
+  letter-spacing:.18em;
+  color:#4D4339;
+}
+.trust span{font-size:10px;color:var(--muted);margin-top:7px;letter-spacing:.03em}
+.section{max-width:1320px;padding:96px 30px}
+.kicker{
+  color:var(--gold);
+  font-size:9px;
+  letter-spacing:.25em;
+  font-weight:700;
+}
+.section h2{
+  font-family:"Cormorant Garamond","Playfair Display",serif;
+  font-size:clamp(42px,5vw,66px);
+  font-weight:600;
+  letter-spacing:-.025em;
+}
+.section-head{margin-bottom:38px}
+.section-head p{font-size:12px;line-height:1.8;color:var(--muted)}
+.filters{gap:6px;margin-bottom:28px}
+.chip{
+  border-radius:0;
+  border-color:var(--line);
+  background:transparent;
+  padding:10px 15px;
+  font-size:9px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+.chip.active{background:var(--ink);border-color:var(--ink);color:#fff}
+.grid{grid-template-columns:repeat(4,1fr);gap:34px 22px}
+.card-media{
+  border-radius:2px;
+  background:#EFE7DA;
+}
+.card-media:after{display:none}
+.product-status-tags{left:14px;top:14px}
+.status-tag{
+  border-radius:0;
+  box-shadow:none;
+  backdrop-filter:none;
+  min-height:25px;
+  font-size:8px;
+  letter-spacing:.14em;
+}
+.status-bestseller{background:var(--ink);color:#fff}
+.status-new{background:var(--paper);color:var(--ink);border:1px solid var(--gold)}
+.status-promo{background:#E9D9D0;color:#6C4031}
+.status-custom{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.quick{
+  width:42px;height:42px;border-radius:50%;
+  box-shadow:0 10px 24px rgba(55,39,25,.12);
+  color:var(--gold);
+}
+.card-info{padding:15px 0}
+.card-title{
+  font-family:"Cormorant Garamond","Playfair Display",serif;
+  font-size:27px;
+  font-weight:600;
+  line-height:1;
+  letter-spacing:-.01em;
+}
+.meta{font-size:8px;letter-spacing:.18em;color:var(--muted)}
+.price{font-size:14px;font-weight:600;letter-spacing:.02em}
+.compare-price{font-size:12px;color:#9A8E80}
+.sale-badge{border-radius:0;background:var(--gold);color:var(--ink);font-size:7px;letter-spacing:.12em}
+.story{background:var(--ink2)}
+.story-copy{background:var(--ink2)}
+.story h2{
+  font-family:"Cormorant Garamond","Playfair Display",serif;
+  font-size:clamp(48px,5vw,76px);
+  letter-spacing:-.025em;
+}
+.story p{color:#D8CFC2;font-size:13px}
+.story-item{border-color:rgba(210,180,122,.28)}
+.story-num{color:var(--gold-light)}
+.faq details{border-color:var(--line);padding:22px 0}
+.faq summary{font-family:"Cormorant Garamond",serif;font-size:21px;font-weight:600}
+.faq p{font-size:12px;line-height:1.8}
+.newsletter{background:var(--paper2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.newsletter h2{font-family:"Cormorant Garamond",serif}
+.newsletter-form{max-width:500px}
+.newsletter-form input{
+  border-radius:0;
+  border-color:var(--line);
+  background:var(--paper);
+}
+.newsletter-form .btn{border-radius:0;background:var(--ink);border-color:var(--ink)}
+.footer{background:#201813}
+.footer-inner{max-width:1320px;padding:72px 30px 25px}
+.footer-grid{gap:50px}
+.footer-grid>div:not(.footer-brand){border-color:#3A2C23}
+.footer-brand h3{
+  font-family:"Cormorant Garamond","Playfair Display",serif;
+  font-size:36px;
+  letter-spacing:.12em;
+}
+.footer h4{color:var(--gold-light);font-size:9px;letter-spacing:.2em}
+.footer p,.footer a{color:#AFA397;font-size:11px}
+.footer a:hover{color:var(--gold-light)}
+.footer-social a{border-color:#4A392D}
+.copyright{border-color:#3A2C23;color:#7D7065}
+.product-page{max-width:1320px;padding:45px 30px 95px}
+.breadcrumbs{font-size:9px;letter-spacing:.13em;text-transform:uppercase}
+.product-layout{gap:78px}
+.main-image,.thumb{border-radius:2px}
+.product-kicker{color:var(--gold);font-size:9px;letter-spacing:.22em}
+.product-title{
+  font-family:"Cormorant Garamond","Playfair Display",serif;
+  font-size:clamp(52px,6vw,78px);
+  letter-spacing:-.03em;
+}
+.product-price{font-family:"Montserrat",sans-serif;font-size:20px;font-weight:600}
+.product-copy{font-size:13px;line-height:1.9;color:var(--muted)}
+.specs{border-color:var(--line)}
+.spec{border-color:var(--line);padding:18px}
+.spec b{font-size:8px;color:var(--gold);letter-spacing:.18em}
+.spec span{font-size:11px}
+.qty{border-radius:2px;border-color:var(--line)}
+.qty button{background:var(--paper)}
+.buy-row{gap:8px}
+.notice{border-radius:2px;background:var(--paper2);border:1px solid var(--line);color:#5E5449}
+.checkout{
+  max-width:900px;
+  padding-top:70px;
+}
+.checkout h1{
+  font-family:"Cormorant Garamond","Playfair Display",serif;
+  font-size:clamp(50px,7vw,78px);
+  line-height:.9;
+  letter-spacing:-.03em;
+}
+.field input,.field textarea,.field select{
+  border-radius:2px!important;
+  border-color:var(--line)!important;
+  background:var(--white)!important;
+}
+.order-box{border-radius:2px!important;border-color:var(--line)!important;background:var(--white)!important}
+.checkout-remove{border-radius:50%!important}
+@media(max-width:800px){
+  .nav{height:70px;padding:0 16px}
+  .logo{font-size:29px;letter-spacing:.16em}
+  .navlinks{display:none}
+  .hero{min-height:700px}
+  .hero:before{background:linear-gradient(180deg,rgba(247,242,233,.08) 0%,rgba(247,242,233,.35) 40%,rgba(247,242,233,.98) 100%)}
+  .hero.has-image:before{background:linear-gradient(180deg,rgba(24,18,14,.05) 0%,rgba(24,18,14,.28) 40%,rgba(24,18,14,.9) 100%)}
+  .hero-inner{padding:42px 20px 55px}
+  .hero h1{font-size:62px;line-height:.86;margin:15px 0 20px}
+  .hero p{font-size:12px;line-height:1.75;margin-bottom:25px}
+  .section{padding:68px 20px}
+  .section-head h2{font-size:48px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:28px 12px}
+  .card-title{font-size:23px}
+  .story h2{font-size:43px}
+  .footer-inner{padding:52px 20px 22px}
+  .product-page{padding:28px 20px 70px}
+  .product-layout{gap:34px}
+}
+@media(max-width:430px){
+  .topbar{font-size:8px;letter-spacing:.16em}
+  .logo{font-size:26px}
+  .hero h1{font-size:56px}
+  .card-title{font-size:21px}
+}
+</style>
 </head>
 <body>
 <div id="app"></div>
