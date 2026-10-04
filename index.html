@@ -724,10 +724,10 @@ function fastSiteImage(src){return fastSupabaseImage(src,72)}
 function localizedAnnouncement(){
   const value=String(siteSettings.announcement_text||"").trim();
   const normalized=value.toLowerCase().replace(/\\s+/g," ");
-  if(normalized.includes("free delivery")&&normalized.includes("160")){
-    if(currentLanguage==="fr")return "Livraison gratuite dès 160 DH";
-    if(currentLanguage==="ar")return "التوصيل مجاني ابتداءً من 160 درهم";
-    return "Free delivery on orders of 160 DH or more";
+  if(normalized.includes("free delivery")&&normalized.includes("260")){
+    if(currentLanguage==="fr")return "Livraison gratuite dès 260 DH";
+    if(currentLanguage==="ar")return "التوصيل مجاني ابتداءً من 260 درهم";
+    return "Free delivery on orders of 260 DH or more";
   }
   return translateString(value||"Cash on delivery in Morocco");
 }
@@ -924,7 +924,7 @@ function cartSubtotal(){
   },0);
 }
 function cartShipping(subtotal=cartSubtotal()){
-  return subtotal>=160?0:Math.max(Number(shippingFee)||0,0);
+  return subtotal>=260?0:Math.max(Number(shippingFee)||0,0);
 }
 function deliveryLabels(){
   if(currentLanguage==="fr")return {delivery:"Livraison",free:"Gratuite"};
