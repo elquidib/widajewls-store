@@ -1126,7 +1126,7 @@ function fastSupabaseImage(src,quality=75){
   return value;
 }
 function fastProductImage(src){return fastSupabaseImage(src,75)}
-function fastSiteImage(src){return fastSupabaseImage(src,72)}
+function fastSiteImage(src){const value=String(src||"").trim();return value||NO_IMAGE}
 function localizedAnnouncement(){
   const value=String(siteSettings.announcement_text||"").trim();
   const normalized=value.toLowerCase().replace(/\\s+/g," ");
