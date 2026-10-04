@@ -387,6 +387,82 @@ button,input,select,textarea{font-family:"Montserrat","DM Sans",system-ui,sans-s
 }
 </style>
 
+<style id="widajewls-story-mobile-fix">
+/* WIDA JEWLS — STORY MOBILE FIX
+   Keep the split editorial composition, but make the copy fit cleanly.
+*/
+@media (max-width:800px){
+  .story-inner{
+    grid-template-columns:1fr 1fr;
+    min-height:0;
+    height:auto;
+    align-items:stretch;
+  }
+  .story-copy{
+    padding:30px 18px 28px;
+    min-width:0;
+    overflow:visible;
+    justify-content:flex-start;
+  }
+  .story .eyebrow{
+    font-size:7px;
+    line-height:1.3;
+    letter-spacing:.16em;
+    white-space:nowrap;
+    margin:0;
+  }
+  .story h2{
+    font-family:"Cormorant Garamond","Playfair Display",serif;
+    font-size:34px;
+    line-height:.92;
+    letter-spacing:-.025em;
+    margin:9px 0 16px;
+    max-width:100%;
+    overflow-wrap:normal;
+    word-break:normal;
+  }
+  .story p{
+    font-size:11px;
+    line-height:1.55;
+    max-width:none;
+    margin:0;
+    color:#ddd;
+  }
+  .story-list{
+    margin-top:22px;
+    gap:0;
+  }
+  .story-item{
+    padding:10px 0;
+    gap:8px;
+    min-height:0;
+    font-size:10px;
+    line-height:1.35;
+    align-items:flex-start;
+  }
+  .story-num{
+    flex:0 0 20px;
+    min-width:20px;
+    font-size:8px;
+    line-height:1.5;
+  }
+  .story-item > :last-child{
+    min-width:0;
+  }
+  .story-visual{
+    min-height:0;
+    height:auto;
+    aspect-ratio:9/16;
+    background-position:center;
+  }
+}
+@media (max-width:430px){
+  .story-copy{padding:27px 16px 25px}
+  .story h2{font-size:31px}
+  .story p{font-size:10.5px;line-height:1.5}
+  .story-item{font-size:9.5px}
+}
+</style>
 </head>
 <body>
 <div id="app"></div>
