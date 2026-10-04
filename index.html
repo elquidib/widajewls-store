@@ -386,6 +386,155 @@ button,input,select,textarea{font-family:"Montserrat","DM Sans",system-ui,sans-s
   .card-title{font-size:21px}
 }
 </style>
+<style id="widajewls-luxury-pass-2">
+/* WIDA JEWLS — PASS 2
+   Art-direction refinement only. No storefront/system behavior changed.
+*/
+:root{
+  --ink:#241B16;
+  --ink2:#2D211A;
+  --paper:#F8F4EC;
+  --paper2:#EFE6D8;
+  --line:#D8C9B2;
+  --muted:#766A5D;
+  --gold:#B9955C;
+  --gold-soft:#D7BB8B;
+  --rose:#A98573;
+}
+
+/* More fashion-editorial rhythm */
+body{letter-spacing:0}
+.topbar{background:#2A1E18;color:#D8BC8C;min-height:34px;padding:8px 14px;font-size:8px;letter-spacing:.25em}
+.header{background:rgba(248,244,236,.97);border-bottom:1px solid rgba(185,149,92,.22)}
+.nav{height:86px;max-width:1380px;padding:0 34px}
+.navlinks{font-size:9px;letter-spacing:.2em;gap:31px}
+.navlinks button:hover{color:var(--gold)}
+.logo{font-family:"Cormorant Garamond","Playfair Display",serif;font-size:39px;letter-spacing:.24em;font-weight:600}
+.logo-star{font-size:13px;color:var(--gold);transform:translateY(-11px);margin-left:1px}
+.iconbtn{border-color:#D5C7B4;background:transparent;transition:border-color .2s,background .2s}
+.iconbtn:hover{background:rgba(185,149,92,.07);border-color:var(--gold)}
+
+/* Buttons: quiet luxury, not app-like */
+.btn{min-height:48px;border-radius:0;font-size:9px;letter-spacing:.2em;font-weight:600;box-shadow:none}
+.btn:hover{background:var(--gold);border-color:var(--gold);color:#241B16!important;transform:none}
+.btn.ghost{background:transparent;border-color:#CFC0AA}
+
+/* Hero: stronger editorial hierarchy */
+.hero{min-height:720px}
+.hero-inner{max-width:1380px;padding:100px 34px}
+.hero h1{
+  font-family:"Cormorant Garamond","Playfair Display",serif;
+  font-size:clamp(72px,8.4vw,124px);
+  line-height:.79;
+  font-weight:600;
+  letter-spacing:-.045em;
+  max-width:700px;
+  margin:19px 0 28px;
+}
+.hero p{font-size:13px;line-height:1.9;max-width:455px;margin-bottom:32px}
+.hero .eyebrow{font-size:8px;letter-spacing:.3em;font-weight:700}
+.hero .btn.light{height:49px;min-height:49px;padding:0 23px;background:#C4A064;border-color:#C4A064;font-size:9px;letter-spacing:.2em}
+.hero .btn.light:hover{background:#241B16;border-color:#241B16}
+
+/* Give the collection more breathing room */
+.section{max-width:1380px;padding:108px 34px}
+.section-head{margin-bottom:45px}
+.section h2{font-size:clamp(45px,5vw,70px);line-height:.9}
+.section-head p{font-size:11px;max-width:390px;line-height:1.9}
+
+/* Filters become quiet editorial controls */
+.filters{gap:18px;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:30px}
+.chip{border:0;border-bottom:1px solid transparent;border-radius:0;padding:8px 1px;background:transparent;font-size:8px;letter-spacing:.18em;color:#6F6255}
+.chip.active{background:transparent;color:var(--ink);border-color:var(--gold)}
+
+/* Product grid feels like a curated gallery */
+.grid{grid-template-columns:repeat(4,1fr);gap:46px 24px}
+.card-media{border-radius:0;background:#F0E8DC}
+.card-info{padding:17px 1px 0}
+.card-title{font-size:26px;line-height:1.02}
+.meta{font-size:7px;letter-spacing:.2em;margin-top:4px}
+.price{font-size:13px;font-weight:600;margin-top:10px}
+.quick{width:38px;height:38px;right:13px;bottom:13px;color:var(--ink);font-size:19px}
+.status-tag{border-radius:0;font-size:7px;letter-spacing:.17em;min-height:23px;padding:5px 8px}
+
+/* Story should feel like a campaign/editorial spread */
+.story-inner{min-height:760px}
+.story-copy{padding:100px clamp(32px,7vw,110px)}
+.story h2{font-size:clamp(52px,5.3vw,82px);line-height:.88}
+.story p{font-size:12px;line-height:1.9;max-width:500px}
+.story-list{margin-top:38px;gap:18px}
+.story-item{padding-top:16px;border-color:rgba(215,187,139,.26)}
+.story-num{font-size:10px;color:var(--gold-soft)}
+
+/* FAQ/newsletter/footer stay quiet */
+.faq{max-width:760px}
+.faq details{padding:24px 0}
+.faq summary{font-size:22px}
+.newsletter{padding-top:92px;padding-bottom:92px}
+.newsletter-form input{border-radius:0}
+.footer-inner{max-width:1380px;padding:78px 34px 25px}
+
+/* Product page: magazine-like */
+.product-page{max-width:1380px;padding:50px 34px 110px}
+.product-layout{grid-template-columns:1.12fr .88fr;gap:88px}
+.gallery{top:112px}
+.main-image{border-radius:0}
+.thumbs{gap:8px}
+.thumb{border-radius:0}
+.product-title{font-size:clamp(55px,6vw,82px);line-height:.86}
+.product-copy{font-size:12px;line-height:1.95}
+.product-price{font-size:20px}
+.specs{margin-top:30px}
+.spec{padding:19px 17px}
+.qty{border-radius:0}
+.qty button{background:var(--paper)}
+.notice{border-radius:0}
+
+/* Checkout: retain trust/conversion, remove generic SaaS feel */
+.checkout h1{font-size:clamp(55px,7vw,82px)}
+.field input,.field textarea,.field select{border-radius:0!important}
+.order-box{border-radius:0!important}
+
+/* Mobile editorial refinement */
+@media(max-width:800px){
+  .topbar{font-size:7px;letter-spacing:.18em}
+  .nav{height:70px;padding:0 17px}
+  .logo{font-size:28px;letter-spacing:.17em}
+  .logo-star{font-size:10px;transform:translateY(-8px)}
+  .actions{gap:4px}
+  .iconbtn{width:38px;height:38px}
+  .hero{min-height:710px}
+  .hero-inner{padding:45px 20px 58px}
+  .hero h1{font-size:60px;line-height:.84;letter-spacing:-.04em;margin:14px 0 21px}
+  .hero p{font-size:11px;line-height:1.8;margin-bottom:26px}
+  .hero .eyebrow{font-size:7px;letter-spacing:.24em}
+  .section{padding:76px 20px}
+  .section-head{margin-bottom:32px}
+  .section-head h2{font-size:49px}
+  .section-head p{font-size:10px;line-height:1.75}
+  .filters{gap:15px;margin-bottom:23px}
+  .chip{font-size:7px;letter-spacing:.14em}
+  .grid{gap:34px 13px}
+  .card-title{font-size:22px}
+  .price{font-size:12px}
+  .story-inner{min-height:0}
+  .story-copy{padding:34px 18px 30px}
+  .story h2{font-size:43px}
+  .story p{font-size:10px;line-height:1.65}
+  .story-list{margin-top:22px}
+  .story-item{padding-top:10px;font-size:9px}
+  .newsletter{padding-top:72px;padding-bottom:72px}
+  .footer-inner{padding:55px 20px 22px}
+  .product-page{padding:30px 20px 75px}
+  .product-layout{gap:38px}
+  .product-title{font-size:55px}
+}
+@media(max-width:430px){
+  .hero h1{font-size:55px}
+  .section-head h2{font-size:46px}
+  .card-title{font-size:20px}
+}
+</style>
 </head>
 <body>
 <div id="app"></div>
