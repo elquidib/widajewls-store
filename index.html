@@ -638,6 +638,151 @@ button,input,select,textarea{font-family:"Montserrat","DM Sans",system-ui,sans-s
   }
 }
 </style>
+<style id="widajewls-story-only-overlay-fix">
+/* WIDA JEWLS — STORY ONLY
+   The only section changed here is the story.
+   All other storefront, checkout, product, admin and visual styles remain untouched.
+*/
+.story{
+  position:relative;
+  overflow:hidden;
+  background:#211A16;
+}
+.story-inner{
+  position:relative;
+  min-height:760px;
+  display:block;
+  width:100%;
+}
+.story-visual{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  min-height:100%;
+  width:100%;
+  background-image:url("https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1800&q=85");
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+}
+.story-inner::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(20,15,12,.78) 0%,rgba(20,15,12,.48) 34%,rgba(20,15,12,.12) 68%,rgba(20,15,12,.18) 100%),
+    linear-gradient(0deg,rgba(20,15,12,.48) 0%,rgba(20,15,12,.08) 48%,rgba(20,15,12,.30) 100%);
+}
+.story-copy{
+  position:relative;
+  z-index:2;
+  width:100%;
+  min-height:760px;
+  padding:90px clamp(28px,7vw,100px);
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  align-items:flex-start;
+  background:transparent;
+  box-sizing:border-box;
+}
+.story-copy > *{
+  max-width:700px;
+}
+.story .eyebrow{
+  color:#D2B47A;
+}
+.story h2{
+  color:#FFFDF8;
+  text-shadow:0 3px 24px rgba(0,0,0,.30);
+}
+.story p{
+  color:#F4EFE7;
+  text-shadow:0 2px 14px rgba(0,0,0,.32);
+}
+.story-item{
+  border-color:rgba(255,255,255,.28);
+}
+.story-item span{
+  color:#FFFDF8;
+  text-shadow:0 2px 12px rgba(0,0,0,.30);
+}
+.story-num{
+  color:#D2B47A;
+  text-shadow:0 2px 10px rgba(0,0,0,.30);
+}
+
+/* The image should still render when no Supabase story image is configured.
+   If an admin image exists later, the existing JS will replace this fallback automatically. */
+.story[data-story-desktop=""] .story-visual{
+  display:block;
+}
+
+@media(max-width:800px){
+  .story-inner{
+    min-height:760px;
+    display:block;
+  }
+  .story-visual{
+    position:absolute;
+    inset:0;
+    min-height:100%;
+    aspect-ratio:auto;
+    height:100%;
+  }
+  .story-inner::after{
+    background:
+      linear-gradient(180deg,rgba(20,15,12,.58) 0%,rgba(20,15,12,.30) 34%,rgba(20,15,12,.60) 72%,rgba(20,15,12,.78) 100%),
+      linear-gradient(90deg,rgba(20,15,12,.18),rgba(20,15,12,.06));
+  }
+  .story-copy{
+    min-height:760px;
+    padding:62px 22px 54px;
+    justify-content:flex-start;
+  }
+  .story h2{
+    font-size:50px;
+    line-height:.9;
+    margin:12px 0 22px;
+    max-width:650px;
+  }
+  .story p{
+    font-size:16px;
+    line-height:1.65;
+    max-width:650px;
+  }
+  .story-list{
+    width:min(100%,650px);
+    margin-top:32px;
+  }
+  .story-item{
+    padding:17px 0;
+    font-size:15px;
+    line-height:1.45;
+  }
+}
+
+@media(max-width:430px){
+  .story-inner,.story-copy{
+    min-height:720px;
+  }
+  .story-copy{
+    padding:52px 20px 46px;
+  }
+  .story h2{
+    font-size:44px;
+  }
+  .story p{
+    font-size:15px;
+    line-height:1.6;
+  }
+  .story-item{
+    font-size:14px;
+  }
+}
+</style>
 </head>
 <body>
 <div id="app"></div>
