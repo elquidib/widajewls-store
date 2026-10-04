@@ -783,6 +783,99 @@ button,input,select,textarea{font-family:"Montserrat","DM Sans",system-ui,sans-s
   }
 }
 </style>
+<style id="widajewls-hero-only-background-fix">
+/* WIDA JEWLS — HERO ONLY
+   Change limited strictly to the hero section.
+   Everything outside .hero is intentionally untouched.
+*/
+.hero{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  background:#211A16;
+  color:#fff;
+}
+.hero-media{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
+.hero-media picture,
+.hero-media img{
+  display:block;
+  width:100%;
+  height:100%;
+}
+.hero-media img{
+  object-fit:cover;
+  object-position:center center;
+}
+/* Fallback only when no hero image is supplied from the admin/database. */
+.hero:not(.has-image) .hero-media{
+  background-image:url("https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=2200&q=88");
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+}
+.hero:not(.has-image) .hero-media img{
+  display:none;
+}
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(20,15,12,.78) 0%,rgba(20,15,12,.48) 38%,rgba(20,15,12,.14) 72%,rgba(20,15,12,.08) 100%),
+    linear-gradient(0deg,rgba(20,15,12,.42) 0%,rgba(20,15,12,.08) 48%,rgba(20,15,12,.22) 100%);
+}
+.hero::after{
+  z-index:1;
+  pointer-events:none;
+}
+.hero-inner{
+  position:relative;
+  z-index:2;
+}
+.hero .eyebrow{
+  color:#D2B47A;
+  text-shadow:0 2px 12px rgba(0,0,0,.28);
+}
+.hero h1{
+  color:#FFFDF8;
+  text-shadow:0 4px 26px rgba(0,0,0,.30);
+}
+.hero p{
+  color:#F4EFE7;
+  text-shadow:0 2px 14px rgba(0,0,0,.30);
+}
+@media(max-width:800px){
+  .hero{
+    min-height:700px;
+  }
+  .hero::before{
+    background:
+      linear-gradient(180deg,rgba(20,15,12,.12) 0%,rgba(20,15,12,.28) 38%,rgba(20,15,12,.82) 100%);
+  }
+  .hero-media img{
+    object-position:center center;
+  }
+  .hero-inner{
+    align-self:end;
+    padding:42px 20px 55px;
+  }
+  .hero h1{
+    color:#FFFDF8;
+  }
+  .hero p{
+    color:#F4EFE7;
+  }
+}
+</style>
 </head>
 <body>
 <div id="app"></div>
