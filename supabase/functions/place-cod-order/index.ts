@@ -5,6 +5,7 @@ const allowedOrigins = new Set([
   "https://widajewls.com",
   "https://www.widajewls.com",
   "https://widajewls-store.pages.dev",
+  "https://widajewls-store.widajewls.workers.dev",
 ]);
 
 const getCorsHeaders = (req: Request) => {
