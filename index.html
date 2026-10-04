@@ -387,6 +387,13 @@ button,input,select,textarea{font-family:"Montserrat","DM Sans",system-ui,sans-s
 }
 </style>
 
+<style id="widajewls-filter-switch">
+#productGrid{will-change:transform,opacity}
+@media (prefers-reduced-motion:reduce){
+  #productGrid{will-change:auto}
+}
+</style>
+
 <style id="widajewls-story-mobile-fix">
 /* WIDA JEWLS — STORY MOBILE FIX
    Keep the split editorial composition, but make the copy fit cleanly.
@@ -794,7 +801,50 @@ return `<div id="homeView" class="view active">${header()}
 ${footer()}</div>`;
 }
 function renderHomeGrid(){const g=document.getElementById("productGrid");if(!g)return;let list=products.filter(p=>(filter==="All"||(filter==="Best Seller"&&p.bestseller)||(filter==="New"&&p.is_new)||(filter==="Promo"&&(p.is_promo||(p.compare_at_price&&Number(p.compare_at_price)>Number(p.price)))) )&&(!searchTerm||[p.name,p.cat,...p.tags,...(p.collections||[])].join(" ").toLowerCase().includes(searchTerm.toLowerCase())));g.innerHTML=list.length?list.map(productCard).join(""):`<div style="grid-column:1/-1;padding:60px;text-align:center;color:#777">No jewelry found.</div>`}
-function setFilter(f){filter=f;home();setTimeout(()=>document.getElementById("shop")?.scrollIntoView(),50)}
+function setFilter(f){
+  if(f===filter)return;
+  const grid=document.getElementById("productGrid");
+  const onHome=(location.hash.replace(/^#/,"")||"/")==="/";
+  if(!grid||!onHome){
+    filter=f;
+    home();
+    return;
+  }
+  const order=["All","Best Seller","New","Promo"];
+  const fromIndex=Math.max(0,order.indexOf(filter));
+  const toIndex=Math.max(0,order.indexOf(f));
+  const direction=toIndex>=fromIndex?1:-1;
+  const savedY=window.scrollY;
+  filter=f;
+  document.querySelectorAll(".filters .chip").forEach(btn=>{
+    btn.classList.toggle("active",btn.textContent.trim()===f);
+  });
+  grid.style.minHeight=grid.offsetHeight+"px";
+  grid.style.transition="opacity .18s ease, transform .24s cubic-bezier(.22,.61,.36,1)";
+  grid.style.opacity="0";
+  grid.style.transform="translateX("+(-direction*24)+"px)";
+  setTimeout(()=>{
+    renderHomeGrid();
+    grid.style.transition="none";
+    grid.style.opacity="0";
+    grid.style.transform="translateX("+(direction*24)+"px)";
+    window.scrollTo({top:savedY,left:0,behavior:"instant"});
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        grid.style.transition="opacity .24s ease, transform .30s cubic-bezier(.22,.61,.36,1)";
+        grid.style.opacity="1";
+        grid.style.transform="translateX(0)";
+        window.scrollTo({top:savedY,left:0,behavior:"instant"});
+        setTimeout(()=>{
+          grid.style.minHeight="";
+          grid.style.transition="";
+          grid.style.transform="";
+          grid.style.opacity="";
+        },320);
+      });
+    });
+  },180);
+}
 function focusSearch(){
 closeMobileMenu();
 if(location.hash!=="#/") location.hash="/";
