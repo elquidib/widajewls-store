@@ -1260,6 +1260,22 @@ setTimeout(()=>{const input=document.getElementById("siteSearch");if(!input)retu
 function openProduct(id){currentProduct=products.find(p=>p.id===id);currentImg=0;location.hash=`/product/${id}`;render();window.scrollTo({top:0,behavior:"instant"})}
 function normalizeProductImages(p){const seen=new Set();p.images=(p.images||[]).filter(x=>x&&x.src&&String(x.src).trim()).filter(x=>{const src=String(x.src).trim();if(seen.has(src))return false;seen.add(src);return true});return p}
 function stableProductId(uuid){let h=0;for(const ch of String(uuid||'')){h=((h<<5)-h)+ch.charCodeAt(0);h|=0}return Math.abs(h)+100}
+async function syncStorefrontSiteSettings(){
+  try{
+    const response=await fetch(SUPABASE_URL+"/rest/v1/site_settings?select=announcement_text,logo_url,store_name,instagram_url,facebook_url,tiktok_url,hero_desktop_url,hero_mobile_url,hero_title,hero_subtitle,hero_button_text,story_desktop_url,story_image_url,story_mobile_url,shipping_fee&id=eq.true&limit=1&_ts="+Date.now(),{
+      cache:"no-store",
+      headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+SUPABASE_KEY}
+    });
+    if(!response.ok)throw new Error("Site settings request failed ("+response.status+")");
+    const rows=await response.json();
+    if(!Array.isArray(rows)||!rows[0])return;
+    siteSettings={...siteSettings,...rows[0]};
+    shippingFee=Math.max(0,Number(siteSettings.shipping_fee??20));
+    render();
+  }catch(e){
+    console.warn("Could not sync storefront site settings",e);
+  }
+}
 async function syncStorefrontProductImages(){
   try{
     const [pr,sr,rr,pc,cr]=await Promise.all([
@@ -1414,7 +1430,7 @@ function updateSEO(){
   link.href=base+(p?"/#/product/"+p.id:"/");
   const schema=document.getElementById("storeStructuredData");
   if(schema){const data=p?{"@context":"https://schema.org","@type":"Product","name":p.name,"description":desc,"image":(p.images||[]).map(x=>x.src).filter(Boolean),"brand":{"@type":"Brand","name":"Wida Jewls"},"offers":{"@type":"Offer","priceCurrency":"MAD","price":Number(p.price),"availability":Number(p.stock)>0?"https://schema.org/InStock":"https://schema.org/OutOfStock","url":base+"/#/product/"+p.id}}:{"@context":"https://schema.org","@type":"WebSite","name":"Wida Jewls","url":base+"/","description":desc};schema.textContent=JSON.stringify(data)}
-}document.addEventListener("blur",e=>{if(e.target?.matches?.('input[name="phone"]'))validateCheckoutPhone(e.target,false)},true);document.addEventListener("input",e=>{if(e.target?.matches?.('input[name="phone"]')){if(isValidMoroccanPhone(e.target.value))setPhoneFieldError(e.target,false);else if(!String(e.target.value||"").trim())setPhoneFieldError(e.target,false)}});window.addEventListener("hashchange",()=>{resetTurnstile();render();updateSEO();if(location.hash==="#/checkout")setTimeout(renderTurnstile,120)});restoreStorefrontCache();document.addEventListener("click",e=>{if(!e.target.closest(".language-switcher"))closeLanguageMenu()});window.addEventListener("scroll",()=>{const b=document.getElementById("backtop");if(b)b.classList.toggle("show",scrollY>600)});render();syncStorefrontProductImages();updateSEO();setTimeout(renderTurnstile,500);
+}document.addEventListener("blur",e=>{if(e.target?.matches?.('input[name="phone"]'))validateCheckoutPhone(e.target,false)},true);document.addEventListener("input",e=>{if(e.target?.matches?.('input[name="phone"]')){if(isValidMoroccanPhone(e.target.value))setPhoneFieldError(e.target,false);else if(!String(e.target.value||"").trim())setPhoneFieldError(e.target,false)}});window.addEventListener("hashchange",()=>{resetTurnstile();render();updateSEO();if(location.hash==="#/checkout")setTimeout(renderTurnstile,120)});restoreStorefrontCache();document.addEventListener("click",e=>{if(!e.target.closest(".language-switcher"))closeLanguageMenu()});window.addEventListener("scroll",()=>{const b=document.getElementById("backtop");if(b)b.classList.toggle("show",scrollY>600)});render();syncStorefrontProductImages();syncStorefrontSiteSettings();updateSEO();setTimeout(renderTurnstile,500);
 </script>
 </body>
 </html>
