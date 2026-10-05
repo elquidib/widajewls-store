@@ -11,7 +11,9 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Wida Jewls">
 <meta property="og:locale" content="en_MA">
+<meta property="og:image" content="https://hfxxcuqjlmivhidmhqva.supabase.co/storage/v1/object/public/product-images/site/hero-desktop-1791122293704-v0mnmp--.png">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://hfxxcuqjlmivhidmhqva.supabase.co/storage/v1/object/public/product-images/site/hero-desktop-1791122293704-v0mnmp--.png">
 <meta name="twitter:title" content="Wida Jewls — Jewelry">
 <meta name="twitter:description" content="Elegant jewelry for every moment. Cash on delivery across Morocco.">
 <link rel="canonical" href="https://widajewls.com/">
@@ -1439,6 +1441,9 @@ function updateSEO(){
   setMeta('meta[name="description"]',{name:"description"},desc);
   setMeta('meta[property="og:title"]',{property:"og:title"},title);
   setMeta('meta[property="og:description"]',{property:"og:description"},desc);
+  const socialImage=p?.images?.[0]?.src||"https://hfxxcuqjlmivhidmhqva.supabase.co/storage/v1/object/public/product-images/site/hero-desktop-1791122293704-v0mnmp--.png";
+  setMeta('meta[property="og:image"]',{property:"og:image"},socialImage);
+  setMeta('meta[name="twitter:image"]',{name:"twitter:image"},socialImage);
   let link=document.querySelector('link[rel="canonical"]');if(!link){link=document.createElement("link");link.rel="canonical";document.head.appendChild(link)}
   link.href=base+(p?"/#/product/"+p.id:"/");
   const schema=document.getElementById("storeStructuredData");
