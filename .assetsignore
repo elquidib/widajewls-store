@@ -1,0 +1,5 @@
+supabase/migrations/
+.github/
+README.md
+wrangler.jsonc
+.assetsignore
