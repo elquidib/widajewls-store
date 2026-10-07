@@ -428,6 +428,25 @@ button,input,select,textarea{font-family:"Montserrat","DM Sans",system-ui,sans-s
 }
 </style>
 
+<style id="widajewls-mobile-product-title-fix">
+/* Mobile only: compact product title, exactly two lines. */
+@media(max-width:700px){
+  .product-title{
+    font-family:"DM Sans",system-ui,sans-serif!important;
+    font-size:20px!important;
+    font-weight:600!important;
+    line-height:1.18!important;
+    letter-spacing:-.01em!important;
+    margin:10px 0 12px!important;
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:2!important;
+    line-clamp:2!important;
+    overflow:hidden!important;
+    max-width:100%!important;
+  }
+}
+</style>
 <style id="widajewls-filter-switch">
 #productGrid{will-change:transform,opacity}
 @media (prefers-reduced-motion:reduce){
