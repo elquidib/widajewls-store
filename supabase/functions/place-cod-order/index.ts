@@ -10,7 +10,7 @@ const allowedOrigins = new Set([
 
 const getCorsHeaders = (req: Request) => {
   const origin = req.headers.get("Origin") || "";
-  const allowOrigin = allowedOrigins.has(origin) ? origin : "https://widajewls.com";
+  const allowOrigin = allowedOrigins.has(origin) ? origin : "";
   return {
     "Access-Control-Allow-Origin": allowOrigin,
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -24,8 +24,19 @@ const json = (req: Request, body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: getCorsHeaders(req) });
 
 Deno.serve(async (req) => {
+  const origin = req.headers.get("Origin") || "";
+  if (origin && !allowedOrigins.has(origin)) {
+    return new Response(JSON.stringify({ error: "Origin not allowed." }), {
+      status: 403,
+      headers: { "Content-Type": "application/json", "Vary": "Origin" },
+    });
+  }
+
   const corsHeaders = getCorsHeaders(req);
-  if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  if (req.method === "OPTIONS") {
+    if (!origin) return new Response("ok", { status: 204, headers: corsHeaders });
+    return new Response("ok", { headers: corsHeaders });
+  }
   if (req.method !== "POST") return json(req, { error: "Method not allowed." }, 405);
 
   const turnstileSecret = Deno.env.get("TURNSTILE_SECRET_KEY");
@@ -49,6 +60,11 @@ Deno.serve(async (req) => {
       p_discount_code?: string | null;
     };
   };
+
+  const contentLength = Number(req.headers.get("Content-Length") || 0);
+  if (contentLength > 100_000) {
+    return json(req, { error: "Request is too large." }, 413);
+  }
 
   try {
     body = await req.json();
@@ -84,8 +100,15 @@ Deno.serve(async (req) => {
   }
 
   const order = body?.order;
-  if (!order || !Array.isArray(order.p_items)) {
+  if (!order || !Array.isArray(order.p_items) || order.p_items.length === 0 || order.p_items.length > 20) {
     return json(req, { error: "Invalid order." }, 400);
+  }
+
+  if (
+    String(order.p_idempotency_key || "").trim().length < 20 ||
+    String(order.p_idempotency_key || "").trim().length > 100
+  ) {
+    return json(req, { error: "Invalid order request." }, 400);
   }
 
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
