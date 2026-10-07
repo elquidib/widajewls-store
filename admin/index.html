@@ -157,10 +157,7 @@ function reorderButtons(id,index,length,type){
   const up=index===0?'disabled':'';
   const down=index===length-1?'disabled':'';
   const fn=type==='products'?'moveProductOrder':'moveCollectionOrder';
-  return '<div class="reorder-buttons" aria-label="Change order">'+
-    '<button type="button" class="reorder-btn" title="Move up" aria-label="Move up" '+up+' onclick="'+fn+'(\\''+id+'\\',-1,event)">↑</button>'+
-    '<button type="button" class="reorder-btn" title="Move down" aria-label="Move down" '+down+' onclick="'+fn+'(\\''+id+'\\',1,event)">↓</button>'+
-  '</div>';
+  return `<div class="reorder-buttons" aria-label="Change order"><button type="button" class="reorder-btn" title="Move up" aria-label="Move up" ${up} onclick="${fn}('${id}',-1,event)">↑</button><button type="button" class="reorder-btn" title="Move down" aria-label="Move down" ${down} onclick="${fn}('${id}',1,event)">↓</button></div>`;
 }
 async function moveProductOrder(id,dir,event){
   if(event){event.preventDefault();event.stopPropagation()}
