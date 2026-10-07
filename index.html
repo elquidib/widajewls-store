@@ -948,7 +948,84 @@ body{background:var(--paper,#F7F2E9)}
 #app{min-height:100vh}
 body.storefront-initializing #app{visibility:hidden}
 body.storefront-initializing{overflow:hidden}
-</style></head>
+</style><style id="widajewls-product-grid-competitor-scale">
+/* WIDA product grid — mobile scale inspired by the supplied reference.
+   Typography/image proportions only; no product data or storefront logic changed. */
+@media (max-width:800px){
+  #productGrid.grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    column-gap:12px;
+    row-gap:30px;
+  }
+  #productGrid .card-media{
+    width:100%;
+    aspect-ratio:1/1;
+    border-radius:2px;
+    overflow:hidden;
+  }
+  #productGrid .card-media img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  #productGrid .card-info{
+    padding:10px 0 0;
+  }
+  #productGrid .card-title{
+    font-family:"DM Sans",system-ui,sans-serif!important;
+    font-size:21px!important;
+    font-weight:700!important;
+    line-height:1.18!important;
+    letter-spacing:-.018em!important;
+    margin:0 0 9px!important;
+    min-height:2.36em;
+  }
+  #productGrid .meta{
+    font-size:10px!important;
+    line-height:1.25!important;
+    letter-spacing:.18em!important;
+    margin-bottom:8px;
+  }
+  #productGrid .price{
+    font-size:20px!important;
+    line-height:1.15!important;
+    font-weight:700!important;
+    margin-top:0!important;
+    letter-spacing:.01em!important;
+  }
+  #productGrid .compare-price{
+    font-size:15px!important;
+    font-weight:500!important;
+  }
+  #productGrid .sale-badge{
+    font-size:8px!important;
+    padding:5px 8px!important;
+    margin-left:4px!important;
+  }
+  #productGrid .product-status-tags{
+    gap:5px;
+    margin:8px 0 0;
+  }
+  #productGrid .status-tag{
+    min-height:24px;
+    padding:5px 8px;
+    font-size:7px;
+  }
+}
+@media (max-width:430px){
+  #productGrid .card-title{
+    font-size:20px!important;
+  }
+  #productGrid .meta{
+    font-size:9px!important;
+  }
+  #productGrid .price{
+    font-size:19px!important;
+  }
+}
+</style>
+</head>
 <body>
 <div id="app"></div>
 <div class="cart-drawer" id="cartDrawer" aria-hidden="true">
