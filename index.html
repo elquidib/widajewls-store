@@ -943,6 +943,12 @@ button,input,select,textarea{font-family:"Montserrat","DM Sans",system-ui,sans-s
   .story-visual{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;aspect-ratio:auto!important;display:block!important;background-position:center top!important;background-size:cover!important;z-index:0!important}
   .story-copy{position:absolute!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;width:100%!important;height:auto!important;min-height:50%!important;max-height:58%!important;padding:34px 16px 28px!important;margin:0!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;align-items:flex-start!important;background:linear-gradient(180deg,rgba(17,17,17,0) 0%,rgba(17,17,17,.12) 12%,rgba(17,17,17,.72) 42%,rgba(17,17,17,.96) 72%,#111 100%)!important;z-index:2!important;box-sizing:border-box!important}
 }
+<style id="widajewls-initial-content-sync">
+/* Prevent stale fallback copy from flashing before live store settings arrive. */
+body{background:var(--paper,#F7F2E9)}
+#app{min-height:100vh}
+body.storefront-initializing #app{visibility:hidden}
+body.storefront-initializing{overflow:hidden}
 </style></head>
 <body>
 <div id="app"></div>
@@ -1506,7 +1512,7 @@ function updateSEO(){
   link.href=base+(p?"/#/product/"+p.id:"/");
   const schema=document.getElementById("storeStructuredData");
   if(schema){const data=p?{"@context":"https://schema.org","@type":"Product","name":p.name,"description":desc,"image":(p.images||[]).map(x=>x.src).filter(Boolean),"brand":{"@type":"Brand","name":"Wida Jewls"},"offers":{"@type":"Offer","priceCurrency":"MAD","price":Number(p.price),"availability":Number(p.stock)>0?"https://schema.org/InStock":"https://schema.org/OutOfStock","url":base+"/#/product/"+p.id}}:{"@context":"https://schema.org","@type":"WebSite","name":"Wida Jewls","url":base+"/","description":desc};schema.textContent=JSON.stringify(data)}
-}document.addEventListener("blur",e=>{if(e.target?.matches?.('input[name="phone"]'))validateCheckoutPhone(e.target,false)},true);document.addEventListener("input",e=>{if(e.target?.matches?.('input[name="phone"]')){if(isValidMoroccanPhone(e.target.value))setPhoneFieldError(e.target,false);else if(!String(e.target.value||"").trim())setPhoneFieldError(e.target,false)}});window.addEventListener("hashchange",()=>{resetTurnstile();render();updateSEO();if(location.hash==="#/checkout")setTimeout(renderTurnstile,120)});restoreStorefrontCache();document.addEventListener("click",e=>{if(!e.target.closest(".language-switcher"))closeLanguageMenu()});window.addEventListener("scroll",()=>{const b=document.getElementById("backtop");if(b)b.classList.toggle("show",scrollY>600)});render();syncStorefrontProductImages();syncStorefrontSiteSettings();updateSEO();setTimeout(renderTurnstile,500);
+}document.addEventListener("blur",e=>{if(e.target?.matches?.('input[name="phone"]'))validateCheckoutPhone(e.target,false)},true);document.addEventListener("input",e=>{if(e.target?.matches?.('input[name="phone"]')){if(isValidMoroccanPhone(e.target.value))setPhoneFieldError(e.target,false);else if(!String(e.target.value||"").trim())setPhoneFieldError(e.target,false)}});document.body.classList.add("storefront-initializing");window.addEventListener("hashchange",()=>{resetTurnstile();render();updateSEO();if(location.hash==="#/checkout")setTimeout(renderTurnstile,120)});restoreStorefrontCache();document.addEventListener("click",e=>{if(!e.target.closest(".language-switcher"))closeLanguageMenu()});window.addEventListener("scroll",()=>{const b=document.getElementById("backtop");if(b)b.classList.toggle("show",scrollY>600)});syncStorefrontProductImages().finally(()=>{document.body.classList.remove("storefront-initializing");updateSEO();setTimeout(renderTurnstile,500)});
 </script>
 </body>
 </html>
