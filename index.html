@@ -1339,12 +1339,12 @@ async function syncStorefrontProductImages(){
       supabaseRest("products?select=id,name,price,compare_at_price,description,stock,status,hidden,bestseller,is_new,is_promo,badge,color,tags,image_urls,seo_title,seo_description,created_at&status=eq.active&hidden=eq.false&order=created_at.desc"),
       supabaseRest("site_settings?select=announcement_text,logo_url,store_name,instagram_url,facebook_url,tiktok_url,hero_desktop_url,hero_mobile_url,hero_title,hero_subtitle,hero_button_text,story_desktop_url,story_image_url,story_mobile_url,shipping_fee&id=eq.true&limit=1")
     ]);
-    const oldByName=new Map(products.map(p=>[p.name,p.name]));
+    const oldByName=new Map(products.map(p=>[p.name,p]));
     siteSettings={...siteSettings,...(sr[0]||{})};
     shippingFee=Math.max(0,Number(siteSettings.shipping_fee??20));
     products=(Array.isArray(pr)?pr:[]).map(row=>{
       return normalizeProductImages({
-        id:stableProductId(row.id),dbId:row.id,name:row.name,
+        id:oldByName.get(row.name)?.id??stableProductId(row.id),dbId:row.id,name:row.name,
         price:Number(row.price||0),
         compare_at_price:row.compare_at_price==null?null:Number(row.compare_at_price),
         description:row.description||"",desc:row.description||"",
@@ -1354,7 +1354,7 @@ async function syncStorefrontProductImages(){
         images:Array.isArray(row.image_urls)?row.image_urls.filter(Boolean).map(src=>({src,pos:"center"})):[],
         seo_title:row.seo_title||"",seo_description:row.seo_description||"",
         collections:[],
-        cat:((row.tags||[]).find(t=>["symbol","dragon","wings","numbers","script"].includes(String(t).toLowerCase()))||"Jewelry")
+        cat:oldByName.get(row.name)?.cat||((row.tags||[]).find(t=>["symbol","dragon","wings","numbers","script"].includes(String(t).toLowerCase()))||"Jewelry")
       });
     });
     cacheStorefrontData();
