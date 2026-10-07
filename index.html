@@ -1349,7 +1349,7 @@ async function syncStorefrontProductImages(){
   try{
     // Critical path: only wait for the data needed to paint the storefront.
     const [pr,sr]=await Promise.all([
-      supabaseRest("products?select=id,name,price,compare_at_price,description,stock,status,hidden,bestseller,is_new,is_promo,badge,color,tags,image_urls,seo_title,seo_description,created_at&status=eq.active&hidden=eq.false&order=created_at.desc"),
+      supabaseRest("products?select=id,name,price,compare_at_price,description,stock,status,hidden,bestseller,is_new,is_promo,badge,color,tags,image_urls,seo_title,seo_description,created_at,sort_order&status=eq.active&hidden=eq.false&order=sort_order.asc&order=created_at.asc"),
       supabaseRest("site_settings?select=announcement_text,logo_url,store_name,instagram_url,facebook_url,tiktok_url,hero_desktop_url,hero_mobile_url,hero_title,hero_subtitle,hero_button_text,story_desktop_url,story_image_url,story_mobile_url,shipping_fee&id=eq.true&limit=1")
     ]);
     const oldByName=new Map(products.map(p=>[p.name,p]));
