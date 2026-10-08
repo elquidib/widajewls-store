@@ -49,6 +49,8 @@ Deno.serve(async (req) => {
     turnstile_token?: string;
     purchase_event_id?: string;
     event_source_url?: string;
+    fbp?: string | null;
+    fbc?: string | null;
     order?: {
       p_customer_name: string;
       p_phone: string;
@@ -139,8 +141,9 @@ Deno.serve(async (req) => {
   }
 
   const result = Array.isArray(data) ? data[0] : data;
-  const metaToken = Deno.env.get("META_CAPI_ACCESS_TOKEN");
-  const metaPixelId = Deno.env.get("META_PIXEL_ID") || "";
+  const metaToken = Deno.env.get("META_CAPI_ACCESS_TOKEN") || "";
+  // Pixel ID is public and also embedded in the storefront. Keep a safe fallback so CAPI does not silently skip because the env var is missing.
+  const metaPixelId = Deno.env.get("META_PIXEL_ID") || "1049787544332204";
   const purchaseEventId = String(body.purchase_event_id || "").trim();
 
   async function sendMetaPurchase() {
@@ -164,6 +167,9 @@ Deno.serve(async (req) => {
         client_ip_address: remoteip || undefined,
         client_user_agent: req.headers.get("user-agent") || undefined,
       };
+      // Browser identifiers improve Event Match Quality. They are not hashed.
+      if (body.fbp) userData.fbp = String(body.fbp);
+      if (body.fbc) userData.fbc = String(body.fbc);
       if (normalizedPhone) userData.ph = [await sha256(normalizedPhone)];
       if (nameParts[0]) userData.fn = [await sha256(nameParts[0])];
       if (nameParts.length > 1) userData.ln = [await sha256(nameParts.slice(1).join(" "))];
@@ -215,15 +221,17 @@ Deno.serve(async (req) => {
       console.error("Meta CAPI Purchase exception:", capiError);
     }
   } else {
-    console.warn("Meta CAPI Purchase skipped: missing configuration or purchase_event_id.");
+    console.warn("Meta CAPI Purchase skipped:", {
+      has_access_token: Boolean(metaToken),
+      has_pixel_id: Boolean(metaPixelId),
+      has_purchase_event_id: Boolean(purchaseEventId),
+      has_total: result?.total != null,
+    });
   }
   }
 
-  if (typeof EdgeRuntime !== "undefined" && typeof EdgeRuntime.waitUntil === "function") {
-    EdgeRuntime.waitUntil(sendMetaPurchase());
-  } else {
-    await sendMetaPurchase();
-  }
+  // Await the CAPI request so a successful order cannot finish before the Meta request is attempted.
+  await sendMetaPurchase();
 
   return json(req, { data: result, purchase_event_id: purchaseEventId });
 });
