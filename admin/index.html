@@ -217,7 +217,7 @@ function printOrderLabel(id){
   '<section class="address"><div class="pin">●</div><div><div class="kicker">DESTINATION</div><div class="city" dir="auto">'+safe(o.city||'')+'</div><div class="street arabic" dir="auto">'+safe(o.address||'')+'</div></div></section>'+
   '<section class="orderitems"><div class="items-head"><span>ORDER ITEMS ('+items.length+')</span><span>QTY / PRICE</span></div>'+itemRows+'</section>'+
   '<footer class="total"><span class="total-label">COD TO COLLECT:</span><span class="total-amount">'+num(o.total)+' DH</span></footer>'+
-  '<div class="footer">THANK YOU FOR YOUR ORDER · WIDA JEWLS</div></main><script>window.addEventListener("load",()=>setTimeout(()=>window.print(),250));</script></body></html>');
+  '<div class="footer">THANK YOU FOR YOUR ORDER · WIDA JEWLS</div></main><script>window.addEventListener("load",()=>setTimeout(()=>window.print(),250));<\/script></body></html>');
   popup.document.close();
 }
 
