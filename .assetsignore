@@ -1,4 +1,5 @@
-supabase/migrations/
+supabase/
+google-sheets/
 .github/
 README.md
 wrangler.jsonc
