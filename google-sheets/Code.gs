@@ -59,7 +59,7 @@ function doPost(e) {
       orderNumber,
       order.created_at ? new Date(order.created_at) : "",
       String(order.customer_name || ""),
-      "'" + String(order.phone || ""),
+      String(order.phone || ""),
       String(order.city || ""),
       String(order.address || ""),
       productNames.join(" ; "),
