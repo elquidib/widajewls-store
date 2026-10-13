@@ -156,11 +156,11 @@ Deno.serve(async (req) => {
       };
 
       const normalizeName = (value: string) =>
-        value.trim().toLowerCase().normalize("NFKD").replace(/[\\u0300-\\u036f]/g, "").replace(/[^a-z0-9\\s]/g, "").replace(/\\s+/g, " ");
+        value.trim().toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, " ");
 
-      const rawPhone = String(order.p_phone || "").replace(/\\D/g, "");
+      const rawPhone = String(order.p_phone || "").replace(/\D/g, "");
       const phoneDigits = rawPhone.startsWith("212") ? rawPhone : rawPhone.replace(/^0/, "212");
-      const normalizedPhone = phoneDigits ? "+" + phoneDigits : "";
+      const normalizedPhone = phoneDigits;
       const nameParts = normalizeName(String(order.p_customer_name || "")).split(" ").filter(Boolean);
 
       const userData: Record<string, unknown> = {
