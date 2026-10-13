@@ -160,7 +160,7 @@ Deno.serve(async (req) => {
 
       const rawPhone = String(order.p_phone || "").replace(/\D/g, "");
       const phoneDigits = rawPhone.startsWith("212") ? rawPhone : rawPhone.replace(/^0/, "212");
-      const normalizedPhone = phoneDigits ? "+" + phoneDigits : "";
+      const normalizedPhone = phoneDigits;
       const nameParts = normalizeName(String(order.p_customer_name || "")).split(" ").filter(Boolean);
 
       const userData: Record<string, unknown> = {
