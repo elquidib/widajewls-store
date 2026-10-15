@@ -41,7 +41,7 @@
   }, 50);
 </script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=widajewlsTurnstileLoaded" async defer></script>
-<link rel="preconnect" href="https://hfxxcuqjlmivhidmhqva.supabase.co"><link rel="preload" as="image" href="https://hfxxcuqjlmivhidmhqva.supabase.co/storage/v1/render/image/public/product-images/site/hero-desktop-1791122293704-v0mnmp--.png?quality=72" fetchpriority="high" media="(min-width:801px)"><link rel="preload" as="image" href="https://hfxxcuqjlmivhidmhqva.supabase.co/storage/v1/render/image/public/product-images/site/hero-mobile-1791122246537-xinlbg--.png?quality=72" fetchpriority="high" media="(max-width:800px)">
+<link rel="preconnect" href="https://hfxxcuqjlmivhidmhqva.supabase.co"><link rel="preload" as="image" href="https://hfxxcuqjlmivhidmhqva.supabase.co/storage/v1/object/public/product-images/site/hero-desktop-1791122293704-v0mnmp--.png" fetchpriority="high" media="(min-width:801px)"><link rel="preload" as="image" href="https://hfxxcuqjlmivhidmhqva.supabase.co/storage/v1/object/public/product-images/site/hero-mobile-1791122246537-xinlbg--.png" fetchpriority="high" media="(max-width:800px)">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1289,34 +1289,13 @@ let currentProduct = null, currentImg = 0, filter="All", searchTerm="";
 const money=n=>`${n.toLocaleString("fr-MA")} DH`;
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 
-function fastSupabaseImage(src,quality=70,width=1000,height=1000,resize="contain"){
+function fastSupabaseImage(src){
   const value=String(src||"").trim();
-  if(!value)return NO_IMAGE;
-  try{
-    const u=new URL(value);
-    if(u.hostname.endsWith("supabase.co")&&u.pathname.includes("/storage/v1/object/public/")){
-      u.pathname=u.pathname.replace("/storage/v1/object/public/","/storage/v1/render/image/public/");
-      u.search="?width="+width+"&height="+height+"&resize="+resize+"&quality="+quality;
-      return u.toString();
-    }
-  }catch(e){}
-  return value;
+  return value||NO_IMAGE;
 }
-function fastProductImage(src){return fastSupabaseImage(src,72,1000,1000,"contain")}
-function fastProductThumbImage(src){
-  const value=String(src||"").trim();
-  if(!value)return NO_IMAGE;
-  try{
-    const u=new URL(value);
-    if(u.hostname.endsWith("supabase.co")&&u.pathname.includes("/storage/v1/object/public/")){
-      u.pathname=u.pathname.replace("/storage/v1/object/public/","/storage/v1/render/image/public/");
-      u.search="?width=320&height=320&resize=contain&quality=65";
-      return u.toString();
-    }
-  }catch(e){}
-  return value;
-}
-function fastSiteImage(src){return fastSupabaseImage(src,68,1440,900,"cover")}
+function fastProductImage(src){return fastSupabaseImage(src)}
+function fastProductThumbImage(src){return fastSupabaseImage(src)}
+function fastSiteImage(src){return fastSupabaseImage(src)}
 function localizedAnnouncement(){
   const value=String(siteSettings.announcement_text||"").trim();
   const normalized=value.toLowerCase().replace(/\\s+/g," ");
