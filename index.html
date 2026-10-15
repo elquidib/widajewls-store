@@ -1289,20 +1289,20 @@ let currentProduct = null, currentImg = 0, filter="All", searchTerm="";
 const money=n=>`${n.toLocaleString("fr-MA")} DH`;
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 
-function fastSupabaseImage(src,quality=75){
+function fastSupabaseImage(src,quality=70,width=1000,height=1000,resize="contain"){
   const value=String(src||"").trim();
   if(!value)return NO_IMAGE;
   try{
     const u=new URL(value);
     if(u.hostname.endsWith("supabase.co")&&u.pathname.includes("/storage/v1/object/public/")){
       u.pathname=u.pathname.replace("/storage/v1/object/public/","/storage/v1/render/image/public/");
-      u.search="?quality="+quality;
+      u.search="?width="+width+"&height="+height+"&resize="+resize+"&quality="+quality;
       return u.toString();
     }
   }catch(e){}
   return value;
 }
-function fastProductImage(src){return fastSupabaseImage(src,75)}
+function fastProductImage(src){return fastSupabaseImage(src,72,1000,1000,"contain")}
 function fastProductThumbImage(src){
   const value=String(src||"").trim();
   if(!value)return NO_IMAGE;
@@ -1310,13 +1310,13 @@ function fastProductThumbImage(src){
     const u=new URL(value);
     if(u.hostname.endsWith("supabase.co")&&u.pathname.includes("/storage/v1/object/public/")){
       u.pathname=u.pathname.replace("/storage/v1/object/public/","/storage/v1/render/image/public/");
-      u.search="?width=700&height=700&resize=contain&quality=72";
+      u.search="?width=320&height=320&resize=contain&quality=65";
       return u.toString();
     }
   }catch(e){}
   return value;
 }
-function fastSiteImage(src){return fastSupabaseImage(src,72)}
+function fastSiteImage(src){return fastSupabaseImage(src,68,1440,900,"cover")}
 function localizedAnnouncement(){
   const value=String(siteSettings.announcement_text||"").trim();
   const normalized=value.toLowerCase().replace(/\\s+/g," ");
