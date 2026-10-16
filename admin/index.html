@@ -159,7 +159,7 @@ $('heroDesktopPreview').innerHTML=s.hero_desktop_url?'<img src="'+esc(s.hero_des
 $('heroMobilePreview').innerHTML=s.hero_mobile_url?'<img src="'+esc(s.hero_mobile_url)+'" alt="Current mobile hero">':'<span class="muted">No mobile hero uploaded.</span>';
 $('storyDesktopPreview').innerHTML=window.currentStoryDesktopUrl?'<img src="'+esc(window.currentStoryDesktopUrl)+'" alt="Current desktop story">':'<span class="muted">No desktop story uploaded.</span>';
 $('storyMobilePreview').innerHTML=window.currentStoryMobileUrl?'<img src="'+esc(window.currentStoryMobileUrl)+'" alt="Current mobile story">':'<span class="muted">No mobile story uploaded.</span>'}
-async function uploadSiteImage(file,key){if(!file)throw new Error('Choose an image first.');if(!file.type.startsWith('image/'))throw new Error('Please choose an image file.');if(file.size>10*1024*1024)throw new Error('Image must be 10MB or smaller.');const safe=file.name.toLowerCase().replace(/[^a-z0-9._-]+/g,'-');const path='site/'+key+'-'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'-'+safe;const up=await db.storage.from('product-images').upload(path,file,{cacheControl:'31536000',upsert:false});if(up.error)throw up.error;return db.storage.from('product-images').getPublicUrl(path).data.publicUrl}
+async function uploadSiteImage(file,key){if(!file)throw new Error('Choose an image first.');if(!file.type.startsWith('image/'))throw new Error('Please choose an image file.');const mobile=/mobile/i.test(key);const optimized=await optimizeImageForUpload(file,{maxWidth:mobile?760:1600,maxHeight:mobile?1000:1200,maxBytes:2097152,quality:0.82});const safe=optimized.name.toLowerCase().replace(/[^a-z0-9._-]+/g,'-');const path='site/'+key+'-'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'-'+safe;const up=await db.storage.from('product-images').upload(path,optimized,{cacheControl:'31536000',upsert:false,contentType:optimized.type});if(up.error)throw up.error;return db.storage.from('product-images').getPublicUrl(path).data.publicUrl}
 function getManagedStoragePath(url){if(!url||typeof url!=='string')return null;try{const u=new URL(url);if(u.origin!==new URL(WIDAJEWLS_SUPABASE.url).origin)return null;const marker='/storage/v1/object/public/product-images/';const i=u.pathname.indexOf(marker);if(i<0)return null;const path=decodeURIComponent(u.pathname.slice(i+marker.length));if(!path||path.startsWith('/')||path.split('/').some(part=>part==='..'))return null;return path}catch{return null}}
 function getManagedSiteImagePath(url,column){const path=getManagedStoragePath(url);if(!path)return null;const prefixes={hero_desktop_url:'hero-desktop-',hero_mobile_url:'hero-mobile-',story_desktop_url:'story-desktop-',story_mobile_url:'story-mobile-'};return path.startsWith('site/'+prefixes[column])?path:null}
 async function removeManagedImageUrls(urls){const paths=[...new Set((urls||[]).map(getManagedStoragePath).filter(Boolean))];if(!paths.length)return true;const result=await db.storage.from('product-images').remove(paths);if(result.error){console.warn('Image cleanup failed:',result.error.message);return false}return true}
@@ -190,7 +190,38 @@ function moveSavedImage(i,dir){const j=i+dir;if(j<0||j>=savedImageUrls.length)re
 function removeSavedImage(i){savedImageUrls.splice(i,1);renderImageManagers()}
 function removeSelectedImage(i){selectedImageFiles.splice(i,1);renderImageManagers()}
 $('pImageFiles').addEventListener('change',e=>{selectedImageFiles=[...selectedImageFiles,...e.target.files];renderImageManagers();e.target.value=''});
-async function uploadImages(productId){const files=[...selectedImageFiles];if(!files.length)return [];const urls=[];for(const file of files){if(file.size>6*1024*1024)throw new Error(file.name+' is larger than 6MB. Please compress it first.');if(!file.type.startsWith('image/'))throw new Error(file.name+' is not an image.');const safe=file.name.toLowerCase().replace(/[^a-z0-9._-]+/g,'-');const path=productId+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'-'+safe;const up=await db.storage.from('product-images').upload(path,file,{cacheControl:'31536000',upsert:false});if(up.error)throw up.error;urls.push(db.storage.from('product-images').getPublicUrl(path).data.publicUrl)}return urls}
+async function optimizeImageForUpload(file,{maxWidth=1600,maxHeight=1600,maxBytes=1572864,quality=0.82}={}){
+  if(!file||!file.type||!file.type.startsWith('image/'))throw new Error('Please choose a valid image file.');
+  if(file.size>15*1024*1024)throw new Error(file.name+' is larger than 15MB. Resize it before uploading.');
+  if(file.type==='image/svg+xml'||file.type==='image/gif'){
+    if(file.size>maxBytes)throw new Error(file.name+' is too large to upload without changing its format. Please use JPG, PNG or WebP.');
+    return file;
+  }
+  let bitmap;
+  try{bitmap=await createImageBitmap(file)}catch(e){
+    if(file.size<=maxBytes)return file;
+    throw new Error('Could not compress '+file.name+'. Please use JPG, PNG or WebP.');
+  }
+  try{
+    const scale=Math.min(1,maxWidth/bitmap.width,maxHeight/bitmap.height);
+    const canvas=document.createElement('canvas');
+    canvas.width=Math.max(1,Math.round(bitmap.width*scale));
+    canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+    const context=canvas.getContext('2d');
+    if(!context)throw new Error('Image compression is unavailable in this browser.');
+    context.drawImage(bitmap,0,0,canvas.width,canvas.height);
+    let blob=null;
+    for(const q of [quality,0.72,0.62]){
+      blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',q));
+      if(blob&&blob.size<=maxBytes)break;
+    }
+    if(!blob)throw new Error('Could not compress '+file.name+'. Please try another image.');
+    if(blob.size>maxBytes)throw new Error(file.name+' is still too large after compression. Please use a smaller image.');
+    const base=file.name.replace(/\.[^.]+$/,'').replace(/[^a-z0-9._-]+/gi,'-')||'image';
+    return new File([blob],base+'.webp',{type:'image/webp',lastModified:Date.now()});
+  }finally{bitmap.close?.()}
+}
+async function uploadImages(productId){const files=[...selectedImageFiles];if(!files.length)return [];const urls=[];for(const file of files){if(!file.type.startsWith('image/'))throw new Error(file.name+' is not an image.');const optimized=await optimizeImageForUpload(file,{maxWidth:1600,maxHeight:1600,maxBytes:1572864,quality:0.82});const safe=optimized.name.toLowerCase().replace(/[^a-z0-9._-]+/g,'-');const path=productId+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'-'+safe;const up=await db.storage.from('product-images').upload(path,optimized,{cacheControl:'31536000',upsert:false,contentType:optimized.type});if(up.error)throw up.error;urls.push(db.storage.from('product-images').getPublicUrl(path).data.publicUrl)}return urls}
 async function removeUploadedImages(urls){const marker='/storage/v1/object/public/product-images/';const paths=(urls||[]).map(u=>{try{const p=new URL(u).pathname;const i=p.indexOf(marker);return i>=0?p.slice(i+marker.length):null}catch(e){return null}}).filter(Boolean);if(paths.length)await db.storage.from('product-images').remove(paths)}
 function renderCollectionChecks(selected=[]){$('collectionChecks').innerHTML=collections.length?collections.map(col=>`<label class="collection-check"><input type="checkbox" value="${col.id}" ${selected.includes(col.id)?'checked':''}> <span>${esc(col.name)}</span></label>`).join(''):'<span class="muted">Create a collection first.</span>'}
 function selectedCollectionIds(){return [...$('collectionChecks').querySelectorAll('input:checked')].map(x=>x.value)}
