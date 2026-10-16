@@ -121,6 +121,9 @@ Deno.serve(async (req) => {
   }
 
   const supabase = createClient(supabaseUrl, serviceRoleKey, {
+    // Forward the trusted Cloudflare client IP so the database's per-IP checkout
+    // rate limiter can enforce its limit instead of seeing the Edge Function IP.
+    global: { headers: remoteip ? { "CF-Connecting-IP": remoteip } : {} },
     auth: { persistSession: false, autoRefreshToken: false },
   });
 
