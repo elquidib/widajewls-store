@@ -7,6 +7,7 @@
 <title>Wida Jewls — Admin</title>
 <link rel="icon" href="./wida-admin-favicon.png?v=2" type="image/png" sizes="64x64"><link rel="apple-touch-icon" href="./wida-admin-favicon.png?v=2" type="image/png" sizes="64x64">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="../supabase-config.js"></script>
 <style>
 :root{--bg:#fffdf8;--card: #fff;--ink:#1C1C1C;--muted:#77736c;--line:#dfd2bd;--accent:#111}
@@ -96,7 +97,7 @@ label{display:block;font-weight:700;margin-top:10px}input,textarea,select{width:
 </div>
 <div class="layout">
 <div class="card">
-<div class="toolbar"><input id="orderSearch" placeholder="Search order, name, phone, city..." oninput="renderOrders()"><select id="orderStatusFilter" onchange="renderOrders()"><option value="">All statuses</option><option>new</option><option>confirmed</option><option>processing</option><option>shipped</option><option>delivered</option><option>cancelled</option><option>returned</option></select><button class="secondary" onclick="loadOrders()">Refresh</button></div>
+<div class="toolbar"><input id="orderSearch" placeholder="Search order, name, phone, city..." oninput="renderOrders()"><select id="orderStatusFilter" onchange="renderOrders()"><option value="">All statuses</option><option>new</option><option>confirmed</option><option>processing</option><option>shipped</option><option>delivered</option><option>cancelled</option><option>returned</option></select><button class="secondary" onclick="loadOrders()">Refresh</button><button onclick="exportConfirmedLadyLog()">Download LadyLog Excel</button></div><p class="hint">Exports only confirmed orders in LadyLog’s Excel column format. Upload the downloaded file under LadyLog → Importation → Import Colis.</p>
 <div class="tablewrap"><table class="table" style="min-width:850px"><thead><tr><th>Order</th><th>Customer</th><th>City</th><th>Total</th><th>Status</th><th>Date</th><th></th></tr></thead><tbody id="orderRows"></tbody></table></div>
 </div>
 <div class="card editor-card" id="orderEditor"><h2 id="orderTitle">Select an order</h2><p id="orderHint" class="muted">Choose an order to see customer details, products and actions.</p><div id="orderDetail" class="hidden"></div></div>
@@ -241,6 +242,23 @@ async function deleteCollection(){const id=$('collectionId').value;if(!id)return
 
 async function loadOrders(){const r=await db.from('orders').select('*').order('created_at',{ascending:false});if(r.error){alert(r.error.message);return}orders=r.data||[];renderWhatsAppOrders();const ids=orders.map(o=>o.id);if(ids.length){const ir=await db.from('order_items').select('*').in('order_id',ids);if(ir.error){alert(ir.error.message);return}orderItems=ir.data||[]}else orderItems=[];renderOrders();renderOrderStats();renderAnalytics();if($('orderTitle')&&$('orderTitle').textContent!=='Select an order'&&window.selectedOrderId){renderOrderDetail(window.selectedOrderId)}}
 function renderAnalytics(){const range=$('analyticsRange')?.value||'30';const cutoff=range==='all'?0:Date.now()-Number(range)*86400000;const valid=orders.filter(o=>!['cancelled','returned'].includes(o.status)&&new Date(o.created_at).getTime()>=cutoff);const revenue=valid.reduce((s,o)=>s+Number(o.total||0),0);const delivered=valid.filter(o=>o.status==='delivered').reduce((s,o)=>s+Number(o.total||0),0);$('anOrders').textContent=valid.length;$('anRevenue').textContent=num(revenue)+' DH';$('anAov').textContent=num(valid.length?revenue/valid.length:0)+' DH';$('anDelivered').textContent=num(delivered)+' DH';const ids=new Set(valid.map(o=>o.id));const pm=new Map();orderItems.filter(i=>ids.has(i.order_id)).forEach(i=>{const x=pm.get(i.product_name)||{units:0,value:0};x.units+=Number(i.quantity||0);x.value+=Number(i.line_total||0);pm.set(i.product_name,x)});$('anProducts').innerHTML=[...pm.entries()].sort((a,b)=>b[1].value-a[1].value).slice(0,10).map(([name,x])=>'<tr><td>'+esc(name)+'</td><td>'+num(x.units)+'</td><td>'+num(x.value)+' DH</td></tr>').join('')||'<tr><td colspan="3" class="muted">No sales in this period.</td></tr>';const cm=new Map();valid.forEach(o=>{const key=o.city||'Unknown';const x=cm.get(key)||{orders:0,value:0};x.orders++;x.value+=Number(o.total||0);cm.set(key,x)});$('anCities').innerHTML=[...cm.entries()].sort((a,b)=>b[1].value-a[1].value).slice(0,10).map(([city,x])=>'<tr><td>'+esc(city)+'</td><td>'+num(x.orders)+'</td><td>'+num(x.value)+' DH</td></tr>').join('')||'<tr><td colspan="3" class="muted">No orders in this period.</td></tr>'}
+function exportConfirmedLadyLog(){
+ const confirmed=orders.filter(o=>o.status==='confirmed');
+ if(!confirmed.length){alert('No confirmed orders to export.');return}
+ if(typeof XLSX==='undefined'){alert('Excel export library did not load. Refresh the page and try again.');return}
+ const headers=['CODE SUIVI','DESTINATAIRE','TELEPHONE','ADRESSE','PRIX','VILLE','COMMENTAIRE','MARCHANDISE','QTY','PEUT OUVRIR','COLIS REMPLACER'];
+ const rows=confirmed.map(o=>{
+  const items=orderItems.filter(i=>i.order_id===o.id);
+  const merchandise=items.map(i=>String(i.product_name||'Article')+' x'+Number(i.quantity||1)).join(' ; ');
+  const qty=items.reduce((sum,i)=>sum+Number(i.quantity||0),0);
+  return [ '', String(o.customer_name||''), String(o.phone||''), String(o.address||''), Number(o.total||0), String(o.city||''), [o.notes||'', 'Commande Wida #'+o.order_number].filter(Boolean).join(' | '), merchandise, qty, 'Non', 'Non' ];
+ });
+ const ws=XLSX.utils.aoa_to_sheet([headers,...rows]);
+ ws['!cols']=[{wch:16},{wch:28},{wch:18},{wch:38},{wch:12},{wch:20},{wch:30},{wch:45},{wch:8},{wch:15},{wch:18}];
+ const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Colis');
+ const date=new Date().toISOString().slice(0,10);
+ XLSX.writeFile(wb,'Wida_LadyLog_confirmed_'+date+'.xlsx');
+}
 function renderOrderStats(){const count=s=>orders.filter(o=>o.status===s).length;['new','confirmed','shipped','delivered'].forEach(s=>{const el=$('orderStat'+s.charAt(0).toUpperCase()+s.slice(1));if(el)el.textContent=count(s)})}
 function renderOrders(){const q=($('orderSearch')?.value||'').toLowerCase().trim(),st=$('orderStatusFilter')?.value||'';const rows=orders.filter(o=>(!st||o.status===st)&&(!q||[o.order_number,o.customer_name,o.phone,o.city,o.address].join(' ').toLowerCase().includes(q)));$('orderRows').innerHTML=rows.length?rows.map(o=>{const d=new Date(o.created_at);return '<tr><td><span class="order-number">#'+o.order_number+'</span><div class="muted">COD</div></td><td><b>'+esc(o.customer_name)+'</b><div class="muted">'+esc(o.phone)+'</div></td><td>'+esc(o.city||'—')+'</td><td>'+num(o.total)+' DH</td><td><span class="order-status '+esc(o.status)+'">'+esc(o.status)+'</span></td><td>'+d.toLocaleDateString('en-GB')+'<div class="muted">'+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+'</div></td><td><button onclick="selectOrder(\''+o.id+'\')">View</button></td></tr>'}).join(''):'<tr><td colspan="7" class="empty">No orders found.</td></tr>'}
 function selectOrder(id){window.selectedOrderId=id;renderOrderDetail(id);document.getElementById('orderEditor')?.scrollIntoView({behavior:'smooth',block:'start'})}
