@@ -1031,6 +1031,10 @@ body.storefront-initializing{overflow:hidden}
 @media(max-width:800px){
   #shop .section-head h2{font-size:24px!important;line-height:1.12!important;white-space:normal!important;max-width:100%!important;text-align:center!important;}#shop .section-head>div{width:100%;text-align:center!important;}#shop .section-head{display:block!important;text-align:center!important;}
 }
+@media(max-width:800px){
+.card-media .product-status-tags{position:absolute!important;left:7px!important;right:auto!important;top:auto!important;bottom:7px!important;z-index:4!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;width:auto!important;min-height:0!important;margin:0!important;gap:3px!important;overflow:visible!important}
+.card-media .product-status-tags .status-tag{min-height:17px!important;padding:3px 5px!important;font-size:6px!important;line-height:1!important;letter-spacing:.06em!important;border-radius:0!important}
+}
 </style>
 </head>
 <body>
@@ -1379,7 +1383,7 @@ if(p.bestseller)badges.push('<span class="status-tag status-bestseller">🔥 Bes
 if(p.is_new)badges.push('<span class="status-tag status-new">New</span>');
 if(p.is_promo)badges.push('<span class="status-tag status-promo">Promo</span>');
 if(!badges.length&&p.badge)badges.push(`<span class="status-tag status-custom">${esc(p.badge)}</span>`);
-return `<article class="card" onclick="openProduct(${p.id})"><div class="card-media"><img src="${fastProductThumbImage(p.images[0]?.src)}" data-fallback="${esc(p.images[0]?.src||"")}" alt="${esc(p.name)}" loading="lazy" decoding="async" onerror="if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.onerror=null;this.src=this.dataset.fallback}"><button class="quick" onclick="event.stopPropagation();addToCart(${p.id},1,this)">+</button></div>${badges.length?`<div class="product-status-tags">${badges.join("")}</div>`:""}<div class="card-info"><div class="card-title">${esc(p.name)}</div><div class="meta">${esc(p.cat)} · ${esc(p.color)}</div><div class="price">${p.compare_at_price&&Number(p.compare_at_price)>Number(p.price)?`<span class="price-sale"><span class="sale-price">${money(p.price)}</span><span class="compare-price">${money(p.compare_at_price)}</span></span>`:`${money(p.price)}`}${p.compare_at_price&&Number(p.compare_at_price)>Number(p.price)?`<span class="sale-badge">Sale</span>`:""}</div></div></article>`;
+return `<article class="card" onclick="openProduct(${p.id})"><div class="card-media"><img src="${fastProductThumbImage(p.images[0]?.src)}" data-fallback="${esc(p.images[0]?.src||"")}" alt="${esc(p.name)}" loading="lazy" decoding="async" onerror="if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.onerror=null;this.src=this.dataset.fallback}"><button class="quick" onclick="event.stopPropagation();addToCart(${p.id},1,this)">+</button>${badges.length?`<div class="product-status-tags">${badges.join("")}</div>`:""}</div><div class="card-info"><div class="card-title">${esc(p.name)}</div><div class="meta">${esc(p.cat)} · ${esc(p.color)}</div><div class="price">${p.compare_at_price&&Number(p.compare_at_price)>Number(p.price)?`<span class="price-sale"><span class="sale-price">${money(p.price)}</span><span class="compare-price">${money(p.compare_at_price)}</span></span>`:`${money(p.price)}`}${p.compare_at_price&&Number(p.compare_at_price)>Number(p.price)?`<span class="sale-badge">Sale</span>`:""}</div></div></article>`;
 }
 function homeView(){
 let list=products.filter(p=>!searchTerm||[p.name,p.cat,...p.tags,...(p.collections||[])].join(" ").toLowerCase().includes(searchTerm.toLowerCase()));
