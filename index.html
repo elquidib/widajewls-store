@@ -1298,22 +1298,20 @@ const money=n=>`${n.toLocaleString("fr-MA")} DH`;
 const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 
 function fastSupabaseImage(src,width=1200,height=1200,quality=78){
+  // Serve the already-compressed original object URL. Avoid on-the-fly
+  // Supabase image transformations so normal storefront views do not consume
+  // the organization's limited transformation quota.
   const value=String(src||"").trim();
   if(!value)return NO_IMAGE;
   try{
     const u=new URL(value);
     if(u.hostname.endsWith("supabase.co")){
-      const objectPath="/storage/v1/object/public/";
       const renderPath="/storage/v1/render/image/public/";
-      if(u.pathname.includes(objectPath)){
-        u.pathname=u.pathname.replace(objectPath,renderPath);
-      }
+      const objectPath="/storage/v1/object/public/";
       if(u.pathname.includes(renderPath)){
-        u.searchParams.set("width",String(width));
-        u.searchParams.set("height",String(height));
-        u.searchParams.set("quality",String(quality));
-        u.searchParams.set("resize","contain");
-        u.searchParams.set("format","webp");
+        u.pathname=u.pathname.replace(renderPath,objectPath);
+        u.search="";
+        u.hash="";
         return u.toString();
       }
     }
