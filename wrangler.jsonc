@@ -2,6 +2,7 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "widajewls-store",
   "compatibility_date": "2026-10-05",
+  "previews": {},
   "assets": {
     "directory": ".",
     "not_found_handling": "single-page-application"
