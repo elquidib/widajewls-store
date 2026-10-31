@@ -116,37 +116,13 @@ begin
     )
     VALUES(
       v_order_id, v_product_id, v_name, v_price, v_qty, v_price * v_qty,
-      v_variant_id, v_variant_name, v_variant_image_url
+      nullif(v_item->>'variant_id','')::uuid,
+      (SELECT pv.name FROM public.product_variants pv WHERE pv.id = nullif(v_item->>'variant_id','')::uuid AND pv.product_id = v_product_id),
+      (SELECT pv.image_url FROM public.product_variants pv WHERE pv.id = nullif(v_item->>'variant_id','')::uuid AND pv.product_id = v_product_id)
     );$new$;
   if position(v_old in v_def) = 0 then raise exception 'Could not locate COD order-item insert'; end if;
   v_def := replace(v_def, v_old, v_new);
 
-
-  v_old := $loop_old$
-  FOR v_item IN SELECT * FROM jsonb_array_elements(p_items) LOOP
-    v_product_id := (v_item->>'product_id')::uuid;
-    v_qty := (v_item->>'quantity')::integer;
-
-    SELECT p.name, p.price INTO v_name, v_price
-    FROM public.products p WHERE p.id = v_product_id;$loop_old$;
-  v_new := $loop_new$
-  FOR v_item IN SELECT * FROM jsonb_array_elements(p_items) LOOP
-    v_product_id := (v_item->>'product_id')::uuid;
-    v_qty := (v_item->>'quantity')::integer;
-    v_variant_id := nullif(v_item->>'variant_id','')::uuid;
-    v_variant_name := null;
-    v_variant_image_url := null;
-    IF v_variant_id IS NOT NULL THEN
-      SELECT pv.name, pv.image_url
-      INTO v_variant_name, v_variant_image_url
-      FROM public.product_variants pv
-      WHERE pv.id = v_variant_id AND pv.product_id = v_product_id AND pv.is_active = true;
-    END IF;
-
-    SELECT p.name, p.price INTO v_name, v_price
-    FROM public.products p WHERE p.id = v_product_id;$loop_new$;
-  if position(v_old in v_def) = 0 then raise exception 'Could not locate COD order-item loop'; end if;
-  v_def := replace(v_def, v_old, v_new);
 
   execute v_def;
 end
