@@ -69,7 +69,7 @@ Deno.serve(async (req: Request) => {
   }
 
   const { data: items, error: itemsError } = await adminClient
-    .from("order_items").select("product_name, quantity, line_total")
+    .from("order_items").select("product_name, variant_name, quantity, line_total")
     .eq("order_id", order.id);
   if (itemsError) return reply({ error: "Could not load order items" }, 500);
 
@@ -84,7 +84,7 @@ Deno.serve(async (req: Request) => {
     total: Number(order.total || 0),
     status: order.status,
     items: (items || []).map((item) => ({
-      product_name: item.product_name || "",
+      product_name: [item.product_name || "", item.variant_name ? `Option: ${item.variant_name}` : ""].filter(Boolean).join(" — "),
       quantity: Number(item.quantity || 0),
       line_total: Number(item.line_total || 0),
     })),
