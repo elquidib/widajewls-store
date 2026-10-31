@@ -105,7 +105,73 @@ body.cart-open .language-switcher{display:none!important}
   .logo img{height:32px!important;max-width:145px!important}
 }
 
-.variant-picker{margin:18px 0 22px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#fff}.variant-picker-title{font-size:12px;font-weight:800;letter-spacing:.06em;margin-bottom:12px}.variant-picker-title span{color:#b42318}.variant-options{display:flex;gap:10px;flex-wrap:wrap}.variant-option{width:86px;border:1px solid #e7e1d7;border-radius:10px;padding:6px;background:#fff;display:grid;gap:6px;cursor:pointer;color:#29251f}.variant-option img{width:100%;height:70px;object-fit:cover;border-radius:6px}.variant-option span{font-size:11px;font-weight:700}.variant-option.active{border:2px solid #c9a45c;background:#fbf7ef}.variant-hint{font-size:11px;color:#777;margin:10px 0 0}.cart-variant{font-size:12px;color:#9a7839;margin:2px 0 6px}</style>
+.variant-picker{margin:18px 0 22px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#fff}.variant-picker-title{font-size:12px;font-weight:800;letter-spacing:.06em;margin-bottom:12px}.variant-picker-title span{color:#b42318}.variant-options{display:flex;gap:10px;flex-wrap:wrap}.variant-option{width:86px;border:1px solid #e7e1d7;border-radius:10px;padding:6px;background:#fff;display:grid;gap:6px;cursor:pointer;color:#29251f}.variant-option img{width:100%;height:70px;object-fit:cover;border-radius:6px}.variant-option span{font-size:11px;font-weight:700}.variant-option.active{border:2px solid #c9a45c;background:#fbf7ef}.variant-hint{font-size:11px;color:#777;margin:10px 0 0}.cart-variant{font-size:12px;color:#9a7839;margin:2px 0 6px}
+/* Compact selectable variation tiles — scales cleanly from 2 to 4+ options */
+.gallery-variant-picker{margin:16px 0 0!important}
+.gallery-variant-picker .variant-picker-heading{gap:3px!important;margin-bottom:9px!important}
+.gallery-variant-picker .variant-picker-title{font-size:14px!important}
+.gallery-variant-picker .variant-picker-subtitle{font-size:10px!important}
+.gallery-variant-picker .variant-options{
+  display:grid!important;
+  grid-template-columns:repeat(auto-fit,minmax(126px,1fr))!important;
+  gap:8px!important;
+  align-items:stretch!important;
+}
+.gallery-variant-picker .variant-option{
+  min-width:0!important;
+  min-height:64px!important;
+  height:auto!important;
+  padding:7px 26px 7px 7px!important;
+  display:grid!important;
+  grid-template-columns:46px minmax(0,1fr)!important;
+  grid-template-rows:auto auto!important;
+  column-gap:8px!important;
+  row-gap:3px!important;
+  align-items:center!important;
+  text-align:left!important;
+  border:1px solid #d9ccba!important;
+  border-radius:7px!important;
+  background:rgba(255,253,248,.7)!important;
+}
+.gallery-variant-picker .variant-option img{
+  grid-column:1!important;grid-row:1 / span 2!important;
+  width:46px!important;height:46px!important;
+  object-fit:cover!important;border-radius:4px!important;
+}
+.gallery-variant-picker .variant-option-name{
+  grid-column:2!important;grid-row:1!important;
+  min-width:0!important;padding:0!important;
+  font-size:11px!important;line-height:1.2!important;
+  overflow-wrap:anywhere!important;
+}
+.gallery-variant-picker .variant-option-state{
+  grid-column:2!important;grid-row:2!important;
+  min-width:0!important;padding:0!important;
+  font-size:8px!important;line-height:1.2!important;
+  letter-spacing:.025em!important;
+}
+.gallery-variant-picker .variant-selection-mark{
+  top:6px!important;right:6px!important;
+  width:15px!important;height:15px!important;
+  border:1px solid #cfc2b0!important;
+  box-shadow:none!important;
+}
+.gallery-variant-picker .variant-option.active{
+  border:1.5px solid var(--gold)!important;
+  background:#fff!important;
+  box-shadow:0 2px 7px rgba(80,57,29,.08)!important;
+}
+.gallery-variant-picker .variant-option.active .variant-selection-mark:after{font-size:10px!important}
+.gallery-variant-picker .variant-hint{margin:7px 0 0!important;font-size:10px!important}
+@media(max-width:560px){
+  .gallery-variant-picker{margin-top:14px!important}
+  .gallery-variant-picker .variant-options{grid-template-columns:repeat(auto-fit,minmax(126px,1fr))!important;gap:7px!important}
+  .gallery-variant-picker .variant-option{min-height:60px!important;padding:6px 23px 6px 6px!important;grid-template-columns:42px minmax(0,1fr)!important;column-gap:7px!important}
+  .gallery-variant-picker .variant-option img{width:42px!important;height:42px!important}
+  .gallery-variant-picker .variant-picker-title{font-size:14px!important}
+}
+
+</style>
 <style id="widajewls-luxury-direction">
 /* WIDA JEWLS — luxury jewelry visual direction
    Design-only layer: preserves all storefront logic, checkout, Supabase, analytics and admin behavior.
