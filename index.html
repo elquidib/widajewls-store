@@ -2260,7 +2260,7 @@ body{background:var(--paper);color:var(--ink);font-family:"DM Sans",Arial,sans-s
 <style id="wida-image-variation-selector">
 /* Variation choices sit in a reserved strip inside the image frame. */
 .main-image:has(.product-image-variants){isolation:isolate;background:#f4efe7}
-.main-image:has(.product-image-variants) #mainProductImg{position:absolute;inset:0 0 116px;width:100%;height:calc(100% - 116px);max-height:none;object-fit:contain;object-position:center;padding:12px 10px 2px;z-index:1}
+.main-image:has(.product-image-variants) #mainProductImg{position:relative;inset:auto;width:100%;height:100%;aspect-ratio:1/1;max-height:none;object-fit:contain;object-position:center;padding:0;z-index:1}
 .product-image-variants{position:absolute;z-index:4;left:0;right:0;bottom:0;padding:9px 10px 10px;background:linear-gradient(180deg,rgba(251,248,242,.91),rgba(251,248,242,.99));border-top:1px solid rgba(184,139,80,.24);backdrop-filter:blur(9px)}
 .product-image-variants-heading{font-size:10px;line-height:1.2;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#78664f;margin:0 0 7px}
 .product-image-variants-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:7px;align-items:stretch}
@@ -2281,7 +2281,7 @@ body{background:var(--paper);color:var(--ink);font-family:"DM Sans",Arial,sans-s
 .wida-variant-dialog{animation:widaChooserEnter .38s cubic-bezier(.2,.75,.25,1) both}
 @keyframes widaChooserEnter{0%{opacity:0;transform:translateY(16px) scale(.985)}100%{opacity:1;transform:translateY(0) scale(1)}}
 @media(max-width:800px){
- .main-image:has(.product-image-variants) #mainProductImg{inset:0 0 116px;height:calc(100% - 116px);padding:10px 8px 0}
+ .main-image:has(.product-image-variants) #mainProductImg{inset:auto;height:100%;padding:0}
  .product-image-variants{padding:8px 8px 9px}
   .main-image:has(.product-image-variants) .zoom{top:12px;bottom:auto;z-index:6}
 .product-image-variants-list{grid-template-columns:repeat(2,minmax(0,1fr))}
