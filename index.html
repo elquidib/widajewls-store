@@ -1386,11 +1386,22 @@ body.wida-variant-modal-open{overflow:hidden}
 }
 .wida-variant-modal.intro .wida-variant-choice{animation:widaVariantCardIntro .72s cubic-bezier(.2,.75,.25,1) both}
 .wida-variant-modal.intro .wida-variant-choice:nth-child(2){animation-delay:.11s}
+/* Keep the variation tiles gently moving on a repeating two-second cycle. */
+@keyframes widaVariantLoop{
+  0%,72%,100%{transform:translateY(0) scale(1);box-shadow:0 0 0 rgba(184,139,80,0)}
+  12%{transform:translateY(-4px) scale(1.012);box-shadow:0 0 0 3px rgba(184,139,80,.13)}
+  24%{transform:translateY(0) scale(1);box-shadow:0 0 0 rgba(184,139,80,0)}
+}
+.wida-variant-modal.loop .wida-variant-choice{animation:widaVariantLoop 2s ease-in-out infinite}
+.wida-variant-modal.loop .wida-variant-choice:nth-child(2){animation-delay:.18s}
+.wida-variant-modal.loop .wida-variant-choice:nth-child(3){animation-delay:.36s}
+.wida-variant-modal.loop .wida-variant-choice:nth-child(4){animation-delay:.54s}
 .wida-variant-modal.needs-choice .wida-variant-choice{animation:widaVariantChoiceNudge .42s ease both;border-color:#b88b50}
 .wida-variant-modal.needs-choice .wida-variant-error{color:#9a6330;font-weight:700}
 .wida-variant-confirm[aria-disabled="true"]{opacity:.72;cursor:pointer}
 @media(prefers-reduced-motion:reduce){
   .wida-variant-modal.intro .wida-variant-choice,
+  .wida-variant-modal.loop .wida-variant-choice,
   .wida-variant-modal.needs-choice .wida-variant-choice{animation:none!important}
 }
 
@@ -1952,7 +1963,7 @@ function openVariantAction(productId,action,qty=1,sourceEl=null){
  const modal=document.createElement("div");modal.id="variantActionModal";modal.className="wida-variant-modal";modal.setAttribute("role","presentation");
  modal.innerHTML='<div class="wida-variant-backdrop" onclick="closeVariantAction()"></div><section class="wida-variant-dialog" role="dialog" aria-modal="true" aria-labelledby="widaVariantTitle"><button class="wida-variant-close" type="button" onclick="closeVariantAction()" aria-label="Close">×</button><div class="wida-variant-kicker">WIDA JEWLS</div><h2 id="widaVariantTitle">Choose your style</h2><p class="wida-variant-product">'+esc(p.name)+'</p><p class="wida-variant-instruction">Select a variation to preview exactly what you will receive.</p><div class="wida-variant-preview" id="widaVariantPreviewWrap"><img id="widaVariantPreview" src="'+esc(fastProductImage(p.images?.[0]?.src||""))+'" alt="'+esc(p.name)+' product preview" loading="eager"><span id="widaVariantPreviewLabel">Choose a variation to see its product image</span></div><div class="wida-variant-list">'+variants.map(v=>'<button type="button" class="wida-variant-choice" data-pending-variant="'+esc(v.id)+'" aria-pressed="false" onclick="chooseVariantForAction(\''+esc(v.id)+'\')"><img src="'+esc(fastProductThumbImage(v.image_url||p.images?.[0]?.src||""))+'" alt="" loading="lazy"><span class="wida-variant-choice-name">'+esc(v.name)+'</span><span class="wida-variant-choice-price">'+money(variantUnitPrice(p,v))+'</span><span class="wida-variant-check" aria-hidden="true">✓</span></button>').join("")+'</div><p class="wida-variant-error" id="widaVariantError" aria-live="polite">Please select one variation to continue.</p><button type="button" class="wida-variant-confirm" id="widaVariantConfirm" aria-disabled="true" onclick="confirmVariantAction()">'+(action==="buy"?"Confirm & continue":"Confirm & add to cart")+'</button><button type="button" class="wida-variant-cancel" onclick="closeVariantAction()">Cancel</button></section>';
  document.body.appendChild(modal);document.body.classList.add("wida-variant-modal-open");applyLanguage();
- setTimeout(()=>{modal.classList.add("open","intro");setTimeout(()=>modal.classList.remove("intro"),950)},10);
+ setTimeout(()=>{modal.classList.add("open","intro","loop");setTimeout(()=>modal.classList.remove("intro"),950)},10);
  const closeOnEscape=e=>{if(e.key==="Escape"){closeVariantAction();document.removeEventListener("keydown",closeOnEscape)}};
  document.addEventListener("keydown",closeOnEscape);
  modal._escapeHandler=closeOnEscape;
