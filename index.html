@@ -1816,7 +1816,7 @@ function setFilter(f){
   const savedY=window.scrollY;
   filter=f;
   document.querySelectorAll(".catalog-filters .chip").forEach(btn=>{
-    btn.classList.toggle("active",btn.textContent.trim()===f);
+    btn.classList.toggle("active",btn.dataset.filter===f);
   });
   grid.style.minHeight=grid.offsetHeight+"px";
   grid.style.transition="opacity .18s ease, transform .24s cubic-bezier(.22,.61,.36,1)";
@@ -2056,7 +2056,7 @@ function updateSEO(){
   const path=location.hash.replace(/^#/,"")||"/";
   const base="https://widajewls.com";
   const p=path.startsWith("/product/")?products.find(x=>x.id===Number(path.split("/")[2])):null;
-  const title=p?(String(p.name)+" — Wida Jewls"):(currentLanguage==="fr"?"Wida Jewls — Bijoux":currentLanguage==="en"?"Wida Jewls — Jewelry":"Wida Jewls — مجوهرات");
+  const title=p?(String(p.name)+" — Wida Jewls"):(currentLanguage==="fr"?"Wida Jewls — Bijoux":currentLanguage==="en"?"Wida Jewls — Elegant Jewelry in Morocco":"Wida Jewls — مجوهرات");
   const desc=p?String(p.desc||"Jewelry design.").slice(0,155):(currentLanguage==="fr"?"Bijoux élégants pour chaque moment. Livraison partout au Maroc.":currentLanguage==="ar"?"مجوهرات أنيقة لكل لحظة. التوصيل لجميع أنحاء المغرب.":"Discover elegant jewelry designed for every moment. Cash on delivery across Morocco.");
   document.title=title;
   const setMeta=(selector,attrs,value)=>{let el=document.querySelector(selector);if(!el){el=document.createElement("meta");Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));document.head.appendChild(el)}el.setAttribute("content",value)};
