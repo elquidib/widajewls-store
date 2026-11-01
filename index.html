@@ -1528,7 +1528,7 @@ let products = [
 ];
 let cart = JSON.parse(localStorage.getItem("widajewls-cart")||"[]");
 
-let currentLanguage = (localStorage.getItem("widajewls-language-user-set")==="1" && ["ar","fr","en"].includes(localStorage.getItem("widajewls-language"))) ? localStorage.getItem("widajewls-language") : "ar";
+let currentLanguage = (localStorage.getItem("widajewls-language-user-set-v2")==="1" && ["ar","fr","en"].includes(localStorage.getItem("widajewls-language"))) ? localStorage.getItem("widajewls-language") : "ar";
 const WIDAJEWLS_LANGUAGES = {
   en:{label:"English",flag:"gb",dir:"ltr"},
   fr:{label:"Français",flag:"fr",dir:"ltr"},
@@ -1648,7 +1648,7 @@ function closeLanguageMenu(){
 function setLanguage(code){
   if(!WIDAJEWLS_LANGUAGES[code])return;
   currentLanguage=code;
-  localStorage.setItem("widajewls-language",code);localStorage.setItem("widajewls-language-user-set","1");
+  localStorage.setItem("widajewls-language",code);localStorage.setItem("widajewls-language-user-set-v2","1");
   closeLanguageMenu();
   render();
   updateSEO();
