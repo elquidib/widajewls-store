@@ -1675,12 +1675,14 @@ function applyLanguage(){
     if(node.parentElement?.closest("script,style,.language-switcher,[data-brand-name]"))return;
     const raw=node.nodeValue||"",trim=raw.trim();
     if(!trim)return;
-    const translated=(checkoutMode?((WIDAJEWLS_TRANSLATIONS.ar||{})[trim]||trim):translateString(trim));
+    const translated=translateString(trim);
     if(translated!==trim)node.nodeValue=raw.replace(trim,translated);
   });
   const attrMap={"Search":"Rechercher","Cart":"Panier","Your email":"Votre e-mail","Search jewelry…":"Rechercher un bijou…","Your name":"Votre nom","06 XX XX XX XX":"06 XX XX XX XX","Agadir":"Agadir","Hay / quartier":"Hay / quartier","Optional note":"Note facultative"};
   const arAttr={"Search":"بحث","Cart":"السلة","Your email":"بريدك الإلكتروني","Search jewelry…":"ابحث عن مجوهرات…","Your name":"اسمك","06 XX XX XX XX":"06 XX XX XX XX","Agadir":"أكادير","Hay / quartier":"الحي / المنطقة","Optional note":"ملاحظة اختيارية"};
-  const attrs=checkoutMode?arAttr:(currentLanguage==="fr"?attrMap:currentLanguage==="ar"?arAttr:{});
+  const enCheckoutAttr={"اسمك":"Your name","أكادير":"Agadir","الحي / المنطقة":"Area / neighbourhood","الهاتف":"Phone"};
+  const frCheckoutAttr={"اسمك":"Votre nom","أكادير":"Agadir","الحي / المنطقة":"Quartier / zone","الهاتف":"Téléphone"};
+  const attrs=currentLanguage==="fr"?{...attrMap,...frCheckoutAttr}:currentLanguage==="en"?enCheckoutAttr:arAttr;
   root.querySelectorAll("input,textarea,button").forEach(el=>{
     ["placeholder","aria-label","title"].forEach(a=>{const v=el.getAttribute(a);if(v&&attrs[v])el.setAttribute(a,attrs[v])});
   });
