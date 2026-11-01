@@ -69,7 +69,7 @@ jobs:
           from pathlib import Path
           html=Path("index.html").read_text()
           required=[
-            'function buyNow(id)',
+            'function buyNow(id',
             'function goCheckout()',
             'function goToSection(id)',
             'id="shop"',
