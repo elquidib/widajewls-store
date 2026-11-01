@@ -1213,6 +1213,94 @@ body.storefront-initializing{overflow:hidden}
 .gallery-variant-picker .variant-hint{margin:10px 0 0!important;font-size:11px!important;color:var(--muted)!important}
 @media(max-width:560px){.gallery-variant-picker{margin-top:17px!important}.gallery-variant-picker .variant-options{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px!important}.gallery-variant-picker .variant-option{padding:7px!important}.gallery-variant-picker .variant-option img{height:78px!important}.gallery-variant-picker .variant-picker-title{font-size:15px!important}}
 </style>
+
+<style id="wida-shopify-product-experience">
+/* WIDA JEWLS — refined Shopify-inspired product detail experience */
+.product-page{max-width:1380px;padding:34px clamp(16px,3vw,42px) 100px}
+.product-layout{grid-template-columns:minmax(0,1.12fr) minmax(340px,.88fr);gap:clamp(34px,5vw,76px);align-items:start}
+.gallery{top:112px}
+.gallery-media-row{display:grid;grid-template-columns:76px minmax(0,1fr);gap:13px;align-items:start;direction:ltr}
+.gallery-media-row .thumbs{display:flex;flex-direction:column;gap:9px;width:100%;margin:0}
+.gallery-media-row .thumb{width:100%;aspect-ratio:1/1;height:auto;border:1px solid #ded4c5;border-radius:3px;background:#f1eadf;overflow:hidden;opacity:.82;transition:border-color .2s ease,opacity .2s ease}
+.gallery-media-row .thumb.active{border:2px solid var(--gold);opacity:1}
+.gallery-media-row .thumb img{width:100%;height:100%;display:block;object-fit:cover}
+.gallery-media-row .main-image{width:100%;aspect-ratio:1/1;background:#f1eadf;border-radius:3px;overflow:hidden}
+.gallery-media-row .main-image>img{width:100%;height:100%;object-fit:contain;display:block}
+.gallery-arrow{width:42px;height:42px;background:rgba(255,253,248,.94);border:1px solid rgba(185,148,90,.32);color:var(--ink);box-shadow:0 4px 16px rgba(30,22,15,.08)}
+.gallery-arrow:disabled{opacity:.28}
+.zoom{width:40px;height:40px;color:var(--ink);background:rgba(255,253,248,.96);border:1px solid rgba(185,148,90,.22);box-shadow:0 4px 16px rgba(30,22,15,.08)}
+.product-kicker{margin:4px 0 12px;font-size:10px;letter-spacing:.18em}
+.product-status-inline{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.product-status-inline .status-tag{min-height:24px;padding:6px 9px;font-size:8px}
+.product-title{font-size:clamp(38px,4.2vw,62px);line-height:.98;letter-spacing:-.025em;margin:8px 0 14px}
+.product-price{font-size:25px;line-height:1.2;margin:0 0 12px}
+.product-price .compare-price{font-size:16px}
+.product-price .sale-badge{padding:6px 9px}
+.product-copy{display:block;-webkit-line-clamp:unset;line-clamp:unset;max-width:560px;font-size:13px;line-height:1.75;margin:12px 0 18px}
+.purchase-area{margin-top:22px}
+.purchase-area .qty{height:48px;max-width:142px;margin-bottom:12px}
+.purchase-area .buy-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.purchase-area .buy-row .btn{min-height:54px;font-size:11px;letter-spacing:.06em}
+.purchase-area .notice{padding:13px 15px;font-size:11px;line-height:1.9;margin-top:14px}
+.specs{margin-top:22px;border:1px solid var(--line);display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.spec{padding:14px 16px;min-width:0}
+.gallery-variant-picker{margin:22px 0 0!important;padding:17px!important;border:1px solid var(--line)!important;background:rgba(255,253,248,.62)!important}
+.gallery-variant-picker .variant-picker-heading{display:flex;flex-direction:column;gap:4px;margin-bottom:12px!important}
+.gallery-variant-picker .variant-picker-title{font-size:13px!important;margin:0!important}
+.gallery-variant-picker .variant-picker-subtitle{font-size:10px;color:var(--muted);line-height:1.4}
+.gallery-variant-picker .variant-options{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(132px,1fr))!important;gap:8px!important}
+.gallery-variant-picker .variant-option{width:auto!important;min-width:0!important;min-height:62px!important;padding:7px 24px 7px 7px!important;grid-template-columns:46px minmax(0,1fr)!important;grid-template-rows:auto auto!important;column-gap:8px!important;row-gap:3px!important;border:1px solid var(--line)!important;border-radius:3px!important;background:#fff!important;position:relative}
+.gallery-variant-picker .variant-option img{width:46px!important;height:46px!important;grid-column:1!important;grid-row:1 / span 2!important;object-fit:cover!important;border-radius:2px!important}
+.gallery-variant-picker .variant-option-name{grid-column:2!important;grid-row:1!important;font-size:11px!important;line-height:1.25!important;font-weight:600!important;overflow-wrap:anywhere}
+.gallery-variant-picker .variant-option-state{grid-column:2!important;grid-row:2!important;font-size:9px!important;line-height:1.2!important;color:var(--muted)!important}
+.gallery-variant-picker .variant-option.active{border:1.5px solid var(--gold)!important;background:#fbf7ef!important;box-shadow:inset 0 0 0 1px rgba(184,148,90,.08)!important}
+.gallery-variant-picker .variant-option.active .variant-option-state{color:#8b6b3e!important}
+.gallery-variant-picker .variant-selection-mark{position:absolute;top:6px!important;right:6px!important;width:14px!important;height:14px!important;border:1px solid #cbb995!important;background:#fff!important;box-shadow:none!important}
+.gallery-variant-picker .variant-option.active .variant-selection-mark{background:var(--gold)!important;border-color:var(--gold)!important}
+.gallery-variant-picker .variant-hint{margin:10px 0 0!important;font-size:10px!important;color:var(--muted)!important}
+@media(max-width:800px){
+ .product-page{padding:20px 15px 126px}
+ .product-layout{display:flex;flex-direction:column;gap:24px}
+ .product-layout>.gallery,.product-layout>div:nth-child(2){width:100%;min-width:0}
+ .gallery{position:relative;top:auto}
+ .gallery-media-row{display:flex;flex-direction:column-reverse;gap:10px;width:100%}
+ .gallery-media-row .main-image{width:100%;aspect-ratio:1/1;border-radius:2px;background:#f1eadf}
+ .gallery-media-row .thumbs{width:100%;display:flex;flex-direction:row;gap:8px;overflow-x:auto;overflow-y:hidden;padding:1px 1px 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+ .gallery-media-row .thumbs::-webkit-scrollbar{display:none}
+ .gallery-media-row .thumb{flex:0 0 58px;width:58px;height:58px;aspect-ratio:1/1;border-radius:2px}
+ .gallery-arrow{width:38px;height:38px}
+ .zoom{width:36px;height:36px}
+ .product-kicker{font-size:9px;margin:0 0 8px}
+ .product-title{font-size:clamp(26px,7vw,34px)!important;line-height:1.12!important;letter-spacing:-.015em!important;margin:8px 0 10px!important;max-width:100%!important;-webkit-line-clamp:unset!important;line-clamp:unset!important}
+ .product-price{font-size:23px;margin-bottom:9px}
+ .product-price .compare-price{font-size:14px}
+ .product-copy{font-size:12px;line-height:1.7;margin:10px 0 14px}
+ .gallery-variant-picker{margin:17px 0 0!important;padding:13px!important}
+ .gallery-variant-picker .variant-options{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+ .gallery-variant-picker .variant-option{min-height:58px!important;padding:6px 22px 6px 6px!important;grid-template-columns:40px minmax(0,1fr)!important;column-gap:7px!important}
+ .gallery-variant-picker .variant-option img{width:40px!important;height:40px!important}
+ .gallery-variant-picker .variant-option-name{font-size:10px!important}
+ .gallery-variant-picker .variant-option-state{font-size:8px!important}
+ .purchase-area{margin-top:18px}
+ .purchase-area .buy-row{grid-template-columns:1fr 1fr;gap:8px}
+ .purchase-area .buy-row .btn{min-height:50px;padding:0 8px;font-size:10px;letter-spacing:0}
+ .purchase-area .notice{font-size:10px;padding:11px 12px}
+ .specs{margin-top:17px}
+ .spec{padding:12px}
+}
+@media(max-width:380px){
+ .product-page{padding-left:12px;padding-right:12px}
+ .gallery-media-row .thumb{flex-basis:52px;width:52px;height:52px}
+ .gallery-variant-picker .variant-option{grid-template-columns:36px minmax(0,1fr)!important;padding-right:20px!important}
+ .gallery-variant-picker .variant-option img{width:36px!important;height:36px!important}
+ .gallery-variant-picker .variant-option-name{font-size:9px!important}
+ .purchase-area .buy-row .btn{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+ .gallery-media-row .thumb,.gallery-arrow{transition:none!important}
+}
+</style>
+
 </head>
 <body>
 <div id="app"></div>
