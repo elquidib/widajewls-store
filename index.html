@@ -1781,7 +1781,7 @@ if(!badges.length&&p.badge)badges.push(`<span class="status-tag status-custom">$
 return `<article class="card" onclick="openProduct(${p.id})"><div class="card-media"><img src="${fastProductThumbImage(p.images[0]?.src)}" data-fallback="${esc(p.images[0]?.src||"")}" alt="${esc(p.name)}" loading="lazy" decoding="async" onerror="if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.onerror=null;this.src=this.dataset.fallback}"><button class="quick" onclick="event.stopPropagation();addToCart(${p.id},1,this)">+</button>${badges.length?`<div class="product-status-tags">${badges.join("")}</div>`:""}</div><div class="card-info"><div class="card-title">${esc(p.name)}</div><div class="meta">${esc(p.cat)} · ${esc(p.color)}</div><div class="price">${p.compare_at_price&&Number(p.compare_at_price)>Number(p.price)?`<span class="price-sale"><span class="sale-price">${money(p.price)}</span><span class="compare-price">${money(p.compare_at_price)}</span></span>`:`${money(p.price)}`}${p.compare_at_price&&Number(p.compare_at_price)>Number(p.price)?`<span class="sale-badge">Sale</span>`:""}</div></div></article>`;
 }
 function getVisibleProducts(){return products.filter(p=>{const searchable=[p.name,p.cat,...(p.tags||[]),...(p.collections||[])].join(" ").toLowerCase();const matchesSearch=!searchTerm||searchable.includes(searchTerm.toLowerCase());const matchesFilter=filter==="All"||(filter==="Best Seller"&&p.bestseller)||(filter==="New"&&p.is_new)||(filter==="Promo"&&p.is_promo);return matchesSearch&&matchesFilter})}
-function catalogToolsHtml(){const options=["All","Best Seller"];if(products.some(p=>p.is_new))options.push("New");if(products.some(p=>p.is_promo))options.push("Promo");return '<div class="catalog-tools"><label class="catalog-search"><span aria-hidden="true">⌕</span><input id="siteSearch" type="search" value="'+esc(searchTerm)+'" oninput="setSearchTerm(this.value)" placeholder="Search jewelry…" autocomplete="off"></label><div class="catalog-filters" role="group" aria-label="Filter products">'+options.map(x=>'<button type="button" data-filter="'+x+'" class="chip '+(filter===x?"active":"") + '" aria-pressed="'+(filter===x)+'" onclick="setFilter(this.dataset.filter)">'+x+'</button>').join("")+'</div></div>'}
+function catalogToolsHtml(){const options=["All","Best Seller"];if(products.some(p=>p.is_new))options.push("New");if(products.some(p=>p.is_promo))options.push("Promo");return '<div class="catalog-tools"><div class="catalog-filters" role="group" aria-label="Filter products">'+options.map(x=>'<button type="button" data-filter="'+x+'" class="chip '+(filter===x?"active":"") + '" aria-pressed="'+(filter===x)+'" onclick="setFilter(this.dataset.filter)">'+x+'</button>').join("")+'</div></div>'}
 function setSearchTerm(value){searchTerm=String(value||"");renderHomeGrid()}
 function homeView(){
 let list=getVisibleProducts();
@@ -2106,7 +2106,7 @@ body{background:var(--paper);color:var(--ink);font-family:"DM Sans",Arial,sans-s
 .hero .btn.light:hover{background:var(--gold);border-color:var(--gold);color:#fff!important}
 .trust{max-width:1320px;grid-template-columns:repeat(2,minmax(0,1fr));border-left:0;border-bottom:1px solid var(--line)}
 .trust div{padding:17px 22px;border-right:0;border-left:1px solid var(--line);font-size:9px;letter-spacing:.16em;color:#665a4a;text-align:center}
-.section{max-width:1320px;padding:clamp(62px,7vw,100px) clamp(18px,3vw,42px)}
+.section{max-width:1320px;padding:clamp(62px,7vw,100px) clamp(18px,3vw,42px)}\n#shop{padding-top:24px;padding-bottom:clamp(62px,7vw,100px)}\n@media(max-width:800px){#shop{padding-top:20px}}
 .section-head{margin-bottom:34px}.kicker{font-size:9px;letter-spacing:.25em;color:#9a7950}.section h2{font-size:clamp(34px,4.8vw,58px);letter-spacing:-.035em}
 #shop{padding-top:clamp(48px,6vw,78px)}#shop .section-head{align-items:center}
 .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,2vw,26px)}
@@ -2196,17 +2196,13 @@ body{background:var(--paper);color:var(--ink);font-family:"DM Sans",Arial,sans-s
 }
 </style>
 <style id="wida-catalog-tools">
-.catalog-tools{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 24px}
-.catalog-search{display:flex;align-items:center;gap:11px;min-height:46px;width:min(100%,310px);padding:0 15px;border:1px solid #e2d8c9;background:rgba(255,255,255,.62);color:#9a7950}
-.catalog-search span{font:26px/1 Georgia,serif;transform:rotate(-20deg)}
-.catalog-search input{width:100%;min-width:0;border:0;outline:0!important;background:transparent;color:#30291f;font:12px "DM Sans",sans-serif}
-.catalog-search input::placeholder{color:#a69a8a}
-.catalog-filters{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}
+.catalog-tools{display:flex;align-items:center;justify-content:flex-start;margin:0 0 22px}
+.catalog-filters{display:flex;align-items:center;justify-content:flex-start;gap:8px;flex-wrap:wrap}
 .catalog-filters .chip{border:1px solid #ded3c3;border-radius:999px;padding:10px 15px;background:transparent;color:#655a4e;font-size:9px;letter-spacing:.1em;text-transform:uppercase;transition:background .2s ease,color .2s ease,border-color .2s ease,transform .2s ease}
 .catalog-filters .chip:hover{border-color:#b88b50;transform:translateY(-1px)}
 .catalog-filters .chip.active{background:#211d18;border-color:#211d18;color:#fff}
 .catalog-empty{grid-column:1/-1;padding:64px 20px;text-align:center;color:#8b7e6e;border:1px dashed #d8cbb8;background:rgba(255,255,255,.35);font-size:13px}
-@media(max-width:700px){.catalog-tools{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:18px}.catalog-search{width:100%;min-height:44px}.catalog-filters{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;padding:0 0 7px;scrollbar-width:none}.catalog-filters::-webkit-scrollbar{display:none}.catalog-filters .chip{flex:0 0 auto;padding:10px 13px;font-size:8px}}
+@media(max-width:700px){.catalog-tools{display:flex;margin:0 0 18px}.catalog-filters{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;padding:0 0 5px;scrollbar-width:none}.catalog-filters::-webkit-scrollbar{display:none}.catalog-filters .chip{flex:0 0 auto;padding:10px 13px;font-size:8px}}
 </style>
 <style id="wida-social-cta">
 .newsletter-actions{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin:28px auto 0}
