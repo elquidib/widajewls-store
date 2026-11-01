@@ -1327,10 +1327,10 @@ body.wida-variant-modal-open{overflow:hidden}
 @media(max-width:480px){.wida-variant-dialog{padding:25px 16px 16px}.wida-variant-dialog h2{font-size:29px}.wida-variant-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.wida-variant-choice{grid-template-columns:40px minmax(0,1fr);min-height:58px;gap:7px;padding:6px 24px 6px 6px}.wida-variant-choice img{width:40px;height:40px}.wida-variant-choice-name{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.wida-variant-modal,.wida-variant-dialog{transition:none!important}}
 
-.wida-variant-preview{position:relative;width:100%;aspect-ratio:16/10;max-height:250px;margin:0 0 13px;background:#eee7dc;border:1px solid var(--line);display:grid;place-items:center;overflow:hidden}
-.wida-variant-preview img{width:100%;height:100%;object-fit:contain;display:block}
+.wida-variant-preview{position:relative;width:100%;height:auto;max-height:none;aspect-ratio:auto;margin:0 0 13px;background:#eee7dc;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.wida-variant-preview img{width:100%;height:auto;max-height: min(54vh, 440px);object-fit:contain;display:block}
 .wida-variant-preview span{position:absolute;left:10px;right:10px;bottom:9px;width:max-content;max-width:calc(100% - 20px);padding:6px 9px;background:rgba(255,253,248,.92);color:var(--ink);font-size:10px;letter-spacing:.02em;border:1px solid rgba(185,148,90,.3)}
-@media(max-width:480px){.wida-variant-preview{aspect-ratio:16/10;max-height:220px;margin-bottom:11px}.wida-variant-preview span{font-size:9px}}
+@media(max-width:480px){.wida-variant-preview{aspect-ratio:auto;max-height:none;margin-bottom:11px}.wida-variant-preview img{max-height: min(48vh, 390px)}.wida-variant-preview span{font-size:9px}}
 </style>
 </head>
 <body>
@@ -1835,7 +1835,7 @@ function chooseVariantForAction(variantId){
  const p=products.find(x=>x.id===pendingVariantAction.productId),v=p?.variants?.find(x=>x.id===variantId);if(!v)return;
  pendingVariantAction.variantId=variantId;
  const preview=document.getElementById("widaVariantPreview"),previewLabel=document.getElementById("widaVariantPreviewLabel");
- if(preview){const imageUrl=v.image_url||p.images?.[0]?.src||"";preview.src=imageUrl?fastProductImage(imageUrl):"";preview.alt=p.name+" – "+v.name;preview.style.display=imageUrl?"block":"none"}
+ if(preview){const imageUrl=v.image_url||p.images?.[0]?.src||"";preview.src=imageUrl;preview.alt=p.name+" – "+v.name;preview.style.display=imageUrl?"block":"none"}
  if(previewLabel)previewLabel.textContent=v.name;
  document.querySelectorAll("#variantActionModal .wida-variant-choice").forEach(b=>{const selected=b.dataset.pendingVariant===variantId;b.classList.toggle("selected",selected);b.setAttribute("aria-pressed",selected?"true":"false")});
  const confirm=document.getElementById("widaVariantConfirm");if(confirm)confirm.disabled=false;
