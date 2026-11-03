@@ -1777,7 +1777,7 @@ function localizedAnnouncement(){
   }
   return translateString(value||"Cash on delivery in Morocco");
 }
-function header(){
+function header(showLanguage=false){
 return `<div class="topbar"><span class="topbar-message">${esc(localizedAnnouncement())}</span></div><header class="header"><nav class="nav">
 <div class="navlinks"><button onclick="home()">Shop</button><button onclick="home();setTimeout(()=>document.getElementById('story')?.scrollIntoView({behavior:'smooth'}),50)">Our story</button></div>
 <button class="iconbtn mobile-menu" onclick="toggleMobileMenu(event)" aria-label="Open menu" aria-expanded="false">☰</button>
@@ -1790,7 +1790,7 @@ return `<div class="topbar"><span class="topbar-message">${esc(localizedAnnounce
 </div>
 <a class="logo" href="#/" onclick="home();return false" data-brand-name="true">${siteSettings.logo_url?`<img src="${esc(siteSettings.logo_url)}" alt="${esc(WIDAJEWLS_BRAND_NAME)}" style="height:38px;max-width:170px;object-fit:contain">`:`<span class="logo-wordmark"><span>WIDA</span><span class="logo-star" aria-hidden="true">✦</span><span>JEWLS</span></span>`}</a>
 <div class="actions"><button class="iconbtn" onclick="openCart()" aria-label="Cart">🛒<span class="badge" id="cartBadge">${cartCount()}</span></button></div>
-</nav></header>${languageSwitcher()}`;
+</nav></header>${showLanguage?languageSwitcher():""}`;
 }
 function footer(){const ig=siteSettings.instagram_url||'https://www.instagram.com/widajewls/';const wa='https://wa.me/212631361103';return `<footer class="footer"><div class="footer-inner"><div class="footer-grid"><div class="footer-brand"><h3 data-brand-name="true">${esc(WIDAJEWLS_BRAND_NAME)}</h3><p>Jewelry made for every moment. Wear it, style it, make it yours.</p><div class="footer-social"><a href="${esc(ig)}" target="_blank" rel="noopener" aria-label="Instagram">IG</a></div></div><div><h4>Shop</h4><a href="#/" onclick="goToShop();return false">All jewelry</a><a href="#/" onclick="setFilter('Best Seller');return false">Bestsellers</a></div><div><h4>Help</h4><a href="#/" onclick="goToSection('faq');return false">FAQ</a><a href="#/" onclick="goToSection('trust');return false">Delivery & COD</a></div><div class="footer-follow"><h4>Follow</h4><a href="${esc(ig)}" target="_blank" rel="noopener">Instagram</a><a href="${esc(wa)}" target="_blank" rel="noopener">WhatsApp</a></div></div><div class="copyright"><span>© ${new Date().getFullYear()} <span data-brand-name="true">${esc(WIDAJEWLS_BRAND_NAME)}</span>. All rights reserved.</span><span class="copyright-note"><a href="#/privacy">Privacy</a> · <a href="#/terms">Terms</a> · <a href="#/returns">Returns</a> · <a href="#/shipping">Shipping</a> · <a href="#/contact">Contact</a></span></div></div></footer>`}
 function home(){
@@ -1837,7 +1837,7 @@ let list=getVisibleProducts();
 const heroDesktop=String(siteSettings.hero_desktop_url||"").trim();
 const heroMobile=String(siteSettings.hero_mobile_url||heroDesktop).trim();
 const heroMedia=heroDesktop?'<div class="hero-media"><picture><source media="(max-width: 800px)" srcset="'+esc(fastSiteImage(heroMobile,760,1000,72))+'"><img src="'+esc(fastSiteImage(heroDesktop,1600,1200,74))+'" alt="Fashion portrait showcasing a jewelry style" fetchpriority="high" loading="eager" decoding="async"></picture></div>':"";
-return `<div id="homeView" class="view active">${header()}
+return `<div id="homeView" class="view active">${header(true)}
 <section class="hero ${heroDesktop?"has-image":""}">${heroMedia}<div class="hero-inner"><div class="eyebrow">Jewelry · made for every moment</div><h1>${esc(siteSettings.hero_title||"A touch of luxury.")}</h1><p>${esc(siteSettings.hero_subtitle||"Discover refined jewelry designed to make every look feel more yours.")}</p><a class="btn light" href="#/" onclick="goToShop();return false">${esc(siteSettings.hero_button_text||"Shop the collection")}</a></div></section>
 <div class="trust" id="trust"><div>Cash on delivery</div><div>Easy to style</div></div>
 <section class="section" id="shop"><div class="section-head"><div><div class="kicker">The collection</div><h2>Discover your jewelry</h2></div></div>
