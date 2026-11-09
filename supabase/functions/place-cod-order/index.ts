@@ -24,7 +24,7 @@ const json = (req: Request, body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: getCorsHeaders(req) });
 
 function normalizeMoroccanPhone(value: unknown): string {
-  let digits = String(value ?? "").replace(/\\D/g, "");
+  let digits = String(value ?? "").replace(/\D/g, "");
   if (digits.startsWith("00212")) digits = digits.slice(5);
   else if (digits.startsWith("212")) digits = digits.slice(3);
   if (/^[67][0-9]{8}$/.test(digits)) digits = "0" + digits;
