@@ -50,7 +50,7 @@ async function enterStaffApp(name){
 $('loginForm').onsubmit=async e=>{
  e.preventDefault();$('loginError').textContent='';
  const username=$('username').value.trim().toLowerCase(),pin=$('pin').value;
- if(!/^[a-z0-9._-]{3,24}$/.test(username)||!/^\\d{6}$/.test(pin)){
+ if(!/^[a-z0-9._-]{3,24}$/.test(username)||!/^\d{6}$/.test(pin)){
   $('loginError').textContent='Enter your username and 6-digit PIN.';return;
  }
  const button=e.currentTarget.querySelector('button');button.disabled=true;button.textContent='Signing in…';
