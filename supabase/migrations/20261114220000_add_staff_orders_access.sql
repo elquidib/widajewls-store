@@ -11,6 +11,7 @@ create table if not exists public.staff_accounts (
   updated_at timestamptz not null default now()
 );
 alter table public.staff_accounts enable row level security;
+drop policy if exists "admin manage staff accounts" on public.staff_accounts;
 create policy "admin manage staff accounts" on public.staff_accounts
   for all to authenticated
   using ((select role from public.profiles where id=(select auth.uid()))='admin')
@@ -27,6 +28,7 @@ create table if not exists public.staff_order_audit (
 );
 create index if not exists staff_order_audit_order_created_idx on public.staff_order_audit(order_id, created_at desc);
 alter table public.staff_order_audit enable row level security;
+drop policy if exists "admin read staff order audit" on public.staff_order_audit;
 create policy "admin read staff order audit" on public.staff_order_audit
   for select to authenticated
   using ((select role from public.profiles where id=(select auth.uid()))='admin');
