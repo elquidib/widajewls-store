@@ -18,3 +18,9 @@
 
 /index.html
   Cache-Control: no-store
+
+/admin/*
+  Cache-Control: no-store
+
+/staff/*
+  Cache-Control: no-store
