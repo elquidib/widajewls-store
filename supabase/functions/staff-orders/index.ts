@@ -81,7 +81,7 @@ Deno.serve(async (req: Request) => {
     if (displayName.length < 1 || displayName.length > 80) return reply({ error: "Enter a staff name (max 80 characters)." }, 400);
     if (!validPin(pin)) return reply({ error: "PIN must contain exactly 6 digits." }, 400);
     const { data: created, error: createError } = await db.auth.admin.createUser({
-      email: username + "@staff.widajewls.invalid", password: pin, email_confirm: true,
+      email: username + "@staff.widajewls.com", password: pin, email_confirm: true,
       user_metadata: { full_name: displayName, account_type: "wida_staff" }
     });
     if (createError || !created.user) return reply({ error: createError?.message || "Could not create staff login" }, 400);
