@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex,nofollow,noarchive">
 <title>Wida Jewls — Staff Orders</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../supabase-config.js"></script>
+<script src="./supabase-config.js"></script>
 <style>
 :root{--bg:#faf8f3;--ink:#1c1c1c;--muted:#77736c;--line:#e5dccd;--gold:#c9a45c}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px Inter,system-ui,sans-serif}
@@ -30,7 +30,7 @@ const db=supabase.createClient(WIDAJEWLS_SUPABASE.url,WIDAJEWLS_SUPABASE.publish
 let orders=[],busy=false;
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function staffEmail(u){return String(u||'').trim().toLowerCase()+'@staff.widajewls.invalid'}
+function staffEmail(u){return String(u||'').trim().toLowerCase()+'@staff.widajewls.com'}
 async function api(payload){const r=await db.functions.invoke('staff-orders',{body:payload});if(r.error)throw new Error(r.error.message||'Request failed');if(r.data?.error)throw new Error(r.data.error);return r.data}
 $('loginForm').onsubmit=async e=>{e.preventDefault();$('loginError').textContent='';const username=$('username').value.trim().toLowerCase(),pin=$('pin').value;if(!/^[a-z0-9._-]{3,24}$/.test(username)||!/^\d{6}$/.test(pin)){$('loginError').textContent='Enter a valid username and six-digit PIN.';return}const r=await db.auth.signInWithPassword({email:staffEmail(username),password:pin});if(r.error){$('loginError').textContent='Incorrect username or PIN.';return}try{const u=await db.auth.getUser();const p=await db.from('profiles').select('role,full_name').eq('id',u.data.user.id).maybeSingle();if(p.data?.role!=='staff'){await db.auth.signOut();$('loginError').textContent='This login is not a staff account.';return}const check=await api({action:'list_orders'});$('staffName').textContent=p.data.full_name||username;$('login').classList.add('hidden');$('app').classList.remove('hidden');orders=check.orders||[];renderOrders()}catch(err){await db.auth.signOut();$('loginError').textContent=err.message||'Could not sign in.'}};
 async function loadOrders(){if(busy)return;busy=true;$('message').textContent='Loading orders...';try{const r=await api({action:'list_orders'});orders=r.orders||[];renderOrders();$('message').textContent='Updated just now.'}catch(e){$('message').textContent=e.message}finally{busy=false}}
