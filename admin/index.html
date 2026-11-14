@@ -122,13 +122,13 @@ label{display:block;font-weight:700;margin-top:10px}input,textarea,select{width:
 </section>
 </div>
 <section id="staffTab" class="hidden">
-<div class="hint">Create separate staff logins. Staff can only access order handling; their PINs are stored securely by Supabase Auth.</div>
+<div class="hint">Create separate staff logins. Staff can only access order handling; their passwords are protected by Supabase Auth.</div>
 <div class="layout">
 <div class="card"><h2>Create staff account</h2>
 <form id="staffCreateForm">
 <label>Staff name</label><input id="staffDisplayName" maxlength="80" required placeholder="e.g. Sara">
 <label>Username</label><input id="staffUsername" minlength="3" maxlength="24" pattern="[a-z0-9._-]+" required placeholder="e.g. sara" autocomplete="off">
-<label>6-digit PIN</label><input id="staffPin" type="password" inputmode="numeric" minlength="6" maxlength="6" pattern="[0-9]{6}" required placeholder="123456" autocomplete="new-password">
+<label>Password (at least 12 characters)</label><input id="staffPin" type="password" minlength="12" maxlength="128" required placeholder="Use 12+ characters" autocomplete="new-password">
 <div class="actions" style="margin-top:14px"><button type="submit">Create staff login</button></div><p id="staffCreateMessage" class="muted"></p>
 </form></div>
 <div class="card"><div class="toolbar"><h2 style="margin:0">Staff accounts</h2><button class="secondary" onclick="loadStaff()">Refresh</button></div>
