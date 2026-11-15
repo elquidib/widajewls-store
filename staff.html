@@ -22,7 +22,7 @@ input,select{width:100%;padding:13px;border:1px solid var(--line);border-radius:
 <div id="app" class="wrap hidden">
 <div class="card row between"><div><div class="brand">WIDA✦JEWLS</div><div class="muted" id="staffName"></div></div><button class="soft" onclick="logout()">تسجيل الخروج</button></div>
 <div class="card"><div class="row between"><div><h2 style="margin:0">الطلبات</h2><p class="muted" style="margin:5px 0">يمكنكِ من هنا متابعة الطلبات والتواصل مع الزبونات فقط.</p></div><button class="soft" onclick="loadOrders()">تحديث</button></div>
-<div class="row" style="margin-top:12px"><input id="search" placeholder="بحث برقم الطلب أو الاسم أو الهاتف أو المدينة" oninput="renderOrders()" style="flex:2;min-width:190px"><select id="filter" onchange="renderOrders()" style="flex:1;min-width:145px"><option value="">جميع الحالات</option><option value="new">طلب جديد</option><option value="confirmed">تم التأكيد</option><option value="processing">قيد التجهيز</option><option value="shipped">تم الشحن</option><option value="delivered">تم التسليم</option><option value="cancelled">ملغي</option><option value="returned">مرتجع</option></select></div></div>
+<div class="row" style="margin-top:12px"><button type="button" class="soft" data-day="today">اليوم</button><button type="button" class="soft" data-day="yesterday">الأمس</button><button type="button" class="soft" data-day="all">كل التواريخ</button></div><label for="orderDate">اختيار تاريخ محدد</label><input id="orderDate" type="date" onchange="dayMode='custom';renderOrders()"><div class="row" style="margin-top:12px"><input id="search" placeholder="بحث برقم الطلب أو الاسم أو الهاتف أو المدينة" oninput="renderOrders()" style="flex:2;min-width:190px"><select id="filter" onchange="renderOrders()" style="flex:1;min-width:145px"><option value="">جميع الحالات</option><option value="new">طلب جديد</option><option value="confirmed">تم التأكيد</option><option value="processing">قيد التجهيز</option><option value="shipped">تم الشحن</option><option value="delivered">تم التسليم</option><option value="cancelled">ملغي</option><option value="returned">مرتجع</option></select></div></div>
 <div id="orders" class="orders"></div><p id="message" class="muted small"></p>
 </div>
 <script>
@@ -31,6 +31,7 @@ let staffSession = sessionStorage.getItem('wida_staff_session') || '';
 let staffDisplayName = sessionStorage.getItem('wida_staff_name') || '';
 let orders = [];
 let busy = false;
+let dayMode = 'today';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({
@@ -180,10 +181,27 @@ function statusLabel(status) {
   })[status] || status || 'غير محدد';
 }
 
+function localOrderDate(value) {
+  return value ? new Intl.DateTimeFormat('en-CA', { timeZone:'Africa/Casablanca', year:'numeric', month:'2-digit', day:'2-digit' }).format(new Date(value)) : '';
+}
+function selectedOrderDate() {
+  if ($('orderDate').value) return $('orderDate').value;
+  if (dayMode === 'all') return '';
+  const date = new Date();
+  if (dayMode === 'yesterday') date.setDate(date.getDate() - 1);
+  return new Intl.DateTimeFormat('en-CA', { timeZone:'Africa/Casablanca', year:'numeric', month:'2-digit', day:'2-digit' }).format(date);
+}
+document.querySelectorAll('[data-day]').forEach(button => button.addEventListener('click', () => {
+  dayMode = button.dataset.day;
+  $('orderDate').value = '';
+  renderOrders();
+}));
 function renderOrders() {
   const query = $('search').value.trim().toLowerCase();
   const filter = $('filter').value;
+  const date = selectedOrderDate();
   const rows = orders.filter(order =>
+    (!date || localOrderDate(order.created_at) === date) &&
     (!filter || order.status === filter) &&
     [order.order_number, order.customer_name, order.phone, order.city].join(' ').toLowerCase().includes(query)
   );
@@ -211,6 +229,7 @@ function renderOrders() {
     return '<article class="card order">' +
       '<div class="row between"><h2>الطلب رقم #' + esc(order.order_number) + '</h2>' +
       '<span class="pill status-' + esc(order.status) + '">' + esc(statusLabel(order.status)) + '</span></div>' +
+      '<div class="muted small" style="margin-top:6px">تاريخ الطلب: ' + esc(localOrderDate(order.created_at)) + '</div>' +
       '<p style="margin:9px 0 4px"><b>' + esc(order.customer_name) + '</b></p>' +
       '<div class="muted">' + esc(order.phone) + ' · ' + esc(order.city || '') + '</div>' +
       '<p style="margin:8px 0">' + esc(order.address || '') + '</p>' +
@@ -219,7 +238,7 @@ function renderOrders() {
       '<span class="total">' + Number(order.total || 0).toFixed(2) + ' درهم</span></div>' +
       '<div class="actions"><a href="tel:' + esc(phone) + '" style="flex:1;text-decoration:none">' +
       '<button class="soft" style="width:100%">اتصال بالزبونة</button></a>' + waButton + actions + '</div></article>';
-  }).join('') || '<div class="card muted">لا توجد طلبات مطابقة لهذا البحث.</div>';
+  }).join('') || '<div class="card muted">لا توجد طلبات مطابقة للتاريخ والحالة والبحث المحدد.</div>';
 }
 
 async function handleOrder(id, operation) {
