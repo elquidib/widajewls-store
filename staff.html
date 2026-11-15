@@ -1,284 +1,37 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow,noarchive">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
-<title>Wida Jewls — إدارة الطلبات</title>
-<script src="./supabase-config.js"></script>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#111"><meta name="robots" content="noindex,nofollow,noarchive"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0"><title>WIDA JEWLS | فريق الطلبات</title><script src="./supabase-config.js"></script>
 <style>
-:root{--bg:#faf8f3;--ink:#1c1c1c;--muted:#77736c;--line:#e5dccd;--gold:#c9a45c}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px Tahoma,Arial,system-ui,sans-serif;direction:rtl}
-.wrap{max-width:1000px;margin:auto;padding:20px}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:18px;margin:0 0 14px}
-.login{max-width:420px;margin:12vh auto}.brand{font-family:Georgia,serif;letter-spacing:.14em;font-size:22px}.muted{color:var(--muted)}label{display:block;font-weight:700;margin:14px 0 6px}
-input,select{width:100%;padding:13px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff}button{border:0;border-radius:10px;padding:12px 15px;font:inherit;font-weight:750;background:#171717;color:#fff;cursor:pointer}button:disabled{opacity:.5}.primary{background:#171717}.whatsapp{background:#16834a;color:#fff}.green{background:#18794e}.red{background:#b42318}.soft{background:#f1eadf;color:#171717}.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.between{justify-content:space-between}.error{color:#b42318}.hidden{display:none!important}.orders{display:grid;gap:12px}.order h2{font-size:18px;margin:0}.pill{border-radius:99px;padding:5px 9px;background:#f3eadc;font-size:12px;font-weight:800}.status-new{background:#fff2ca}.status-confirmed{background:#e7f2ff}.status-shipped,.status-delivered{background:#e4f5ea}.items{border-top:1px solid var(--line);margin-top:12px;padding-top:8px}.item{display:flex;justify-content:space-between;gap:12px;padding:5px 0}.total{font-size:18px;font-weight:850}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.actions button{flex:1;min-width:105px}.actions a{display:flex;min-width:105px}.small{font-size:12px}.hidden{display:none!important}@media(min-width:700px){.orders{grid-template-columns:1fr 1fr}}
-</style>
-</head>
-<body>
-<div id="login" class="wrap login"><div class="card">
-<div class="brand">WIDA✦JEWLS</div><h2>تسجيل دخول الموظفة</h2><p class="muted">أدخلي اسم المستخدم والرمز السري المكوّن من 6 أرقام.</p>
-<form id="loginForm"><label>اسم المستخدم</label><input id="username" autocomplete="username" required maxlength="24" placeholder="اسم المستخدم"><label>الرمز السري (6 أرقام)</label><input id="pin" type="password" inputmode="numeric" pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="one-time-code" required placeholder="••••••"><button type="submit" style="width:100%;margin-top:16px">دخول</button><p id="loginError" class="error"></p></form>
-</div></div>
-<div id="app" class="wrap hidden">
-<div class="card row between"><div><div class="brand">WIDA✦JEWLS</div><div class="muted" id="staffName"></div></div><button class="soft" onclick="logout()">تسجيل الخروج</button></div>
-<div class="card"><div class="row between"><div><h2 style="margin:0">الطلبات</h2><p class="muted" style="margin:5px 0">يمكنكِ من هنا متابعة الطلبات والتواصل مع الزبونات فقط.</p></div><button class="soft" onclick="loadOrders()">تحديث</button></div>
-<div class="row" style="margin-top:12px"><button type="button" class="soft" data-day="today">اليوم</button><button type="button" class="soft" data-day="yesterday">الأمس</button><button type="button" class="soft" data-day="all">كل التواريخ</button></div><label for="orderDate">اختيار تاريخ محدد</label><input id="orderDate" type="date" onchange="dayMode='custom';renderOrders()"><div class="row" style="margin-top:12px"><input id="search" placeholder="بحث برقم الطلب أو الاسم أو الهاتف أو المدينة" oninput="renderOrders()" style="flex:2;min-width:190px"><select id="filter" onchange="renderOrders()" style="flex:1;min-width:145px"><option value="">جميع الحالات</option><option value="new">طلب جديد</option><option value="confirmed">تم التأكيد</option><option value="processing">قيد التجهيز</option><option value="shipped">تم الشحن</option><option value="delivered">تم التسليم</option><option value="cancelled">ملغي</option><option value="returned">مرتجع</option></select></div></div>
-<div id="orders" class="orders"></div><p id="message" class="muted small"></p>
-</div>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#171717;--muted:#777;--line:#e9e5de;--green:#147849;--red:#b42318;--amber:#946200}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,Arial,sans-serif}button,input{font:inherit}button{border:0;border-radius:12px;padding:13px 15px;font-weight:800;cursor:pointer;min-height:46px}button:disabled{opacity:.5}.wrap{max-width:720px;margin:auto;padding:16px 13px calc(30px + env(safe-area-inset-bottom))}.top{display:flex;justify-content:space-between;align-items:center;margin:4px 2px 16px}.brand{font-weight:950;letter-spacing:.08em;font-size:19px}.muted{color:var(--muted);font-size:13px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;margin-bottom:12px;box-shadow:0 3px 14px #00000005}h1{font-size:22px;margin:0 0 6px}h2{font-size:17px;margin:0 0 12px}label{display:block;font-size:13px;font-weight:800;margin:12px 0 6px}input{width:100%;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fff}.primary{background:#111;color:#fff;width:100%;margin-top:15px}.soft{background:#eeeae3;color:#222}.error{color:var(--red);font-size:13px}.hidden{display:none!important}.tabs{display:flex;gap:7px;overflow:auto;margin:12px 0}.tab{white-space:nowrap;background:#ebe8e1;color:#333}.tab.active{background:#111;color:#fff}.toolbar{display:flex;gap:8px;align-items:center}.toolbar input{flex:1;min-width:0}.count{font-size:12px;color:var(--muted);white-space:nowrap}.orderhead{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:12px}.pill{background:#fff3d1;color:#795500;padding:5px 9px;border-radius:99px;font-size:11px;font-weight:800}.name{font-size:21px;font-weight:900;margin-bottom:10px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.info{background:#faf9f6;border:1px solid var(--line);border-radius:11px;padding:10px;min-width:0}.info small{display:block;color:var(--muted);font-size:11px}.info b{font-size:14px;overflow-wrap:anywhere}.wide{grid-column:1/-1}.items{border-top:1px solid var(--line);margin-top:13px;padding-top:8px}.item{display:flex;justify-content:space-between;gap:10px;padding:7px 0;font-size:13px}.total{display:flex;justify-content:space-between;border-top:1px dashed var(--line);padding-top:12px;margin-top:6px;font-size:18px;font-weight:900}.links{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.link{display:flex;align-items:center;justify-content:center;text-decoration:none;border-radius:12px;padding:13px;font-weight:900;min-height:46px}.call{background:#eaf5ee;color:#176b42}.wa{background:#e9f7ee;color:#087443}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.confirm{background:#147849;color:#fff}.cancel{background:#fff0ee;color:#ad261d}.later{grid-column:1/-1;background:#fff4d7;color:#805600}.empty{text-align:center;color:var(--muted);padding:28px 10px}.date-shortcuts{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.date-input{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);margin:5px 0 12px}@media(max-width:390px){.grid{grid-template-columns:1fr}.wide{grid-column:auto}.actions{grid-template-columns:1fr}.later{grid-column:auto}}
+</style></head><body><div class="wrap">
+<header class="top"><div><div class="brand">WIDA✦JEWLS</div><div class="muted">لوحة فريق تأكيد الطلبات</div></div><button id="logout" class="soft hidden">خروج</button></header>
+<section id="login" class="card"><h1>مرحباً بك 🌸</h1><p class="muted">دخلي اسم المستخدم والرمز السري ديالك.</p><form id="loginForm"><label>اسم المستخدم</label><input id="username" autocomplete="username" required minlength="3"><label>PIN — ستة أرقام</label><input id="pin" inputmode="numeric" autocomplete="current-password" pattern="[0-9]{6}" maxlength="6" required><button class="primary" id="loginBtn">دخول</button><p id="loginError" class="error" aria-live="polite"></p></form></section>
+<main id="app" class="hidden"><section class="card"><div class="toolbar"><div style="flex:1"><b id="staffName">فريق الطلبات</b><div class="muted">اختاري الطلب وتواصلي مع الزبونة</div></div><button id="refresh" class="soft">تحديث</button></div></section>
+<div class="toolbar"><input id="search" placeholder="بحث برقم الطلب أو الاسم أو الهاتف..." aria-label="بحث"><span id="resultCount" class="count"></span></div>
+<div class="date-shortcuts"><button class="tab active" data-day="today">اليوم</button><button class="tab" data-day="yesterday">الأمس</button><button class="tab" data-day="all">كل التواريخ</button></div><label for="orderDate">اختيار تاريخ محدد</label><input id="orderDate" type="date" class="date-input">
+<nav class="tabs" id="tabs"><button class="tab active" data-status="new">جديدة</button><button class="tab" data-status="confirmed">مؤكدة</button><button class="tab" data-status="processing">قيد التجهيز</button><button class="tab" data-status="shipped">خرجت للتوصيل</button><button class="tab" data-status="delivered">تم التسليم</button><button class="tab" data-status="cancelled">ملغاة</button><button class="tab" data-status="returned">مرتجعة</button><button class="tab" data-status="all">جميع الطلبات</button></nav>
+<div id="message" class="muted" aria-live="polite"></div><div id="orders"></div></main></div>
 <script>
-const staffApiUrl = WIDAJEWLS_SUPABASE.url.replace(/\/+$/, '') + '/functions/v1/staff-orders';
-let staffSession = sessionStorage.getItem('wida_staff_session') || '';
-let staffDisplayName = sessionStorage.getItem('wida_staff_name') || '';
-let orders = [];
-let busy = false;
-let dayMode = 'today';
-
-const $ = id => document.getElementById(id);
-const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({
-  '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-}[char]));
-
-async function api(payload) {
-  const headers = {
-    'Content-Type': 'application/json',
-    'apikey': WIDAJEWLS_SUPABASE.publishableKey
-  };
-  if (staffSession) headers['x-staff-session'] = staffSession;
-  const response = await fetch(staffApiUrl, {
-    method: 'POST', headers, body: JSON.stringify(payload), cache: 'no-store'
-  });
-  const raw = await response.text();
-  let data = {};
-  try { data = raw ? JSON.parse(raw) : {}; } catch {}
-  if (!response.ok || data.error) {
-    const error = new Error(data.error || 'Request failed. Please try again.');
-    error.status = response.status;
-    throw error;
-  }
-  return data;
-}
-
-function clearStaffSession() {
-  staffSession = '';
-  staffDisplayName = '';
-  sessionStorage.removeItem('wida_staff_session');
-  sessionStorage.removeItem('wida_staff_name');
-}
-
-async function enterStaffApp(name) {
-  const result = await api({ action: 'list_orders' });
-  staffDisplayName = name || 'Staff';
-  sessionStorage.setItem('wida_staff_name', staffDisplayName);
-  $('staffName').textContent = staffDisplayName;
-  $('login').classList.add('hidden');
-  $('app').classList.remove('hidden');
-  orders = result.orders || [];
-  renderOrders();
-}
-
-async function expireStaffSession() {
-  clearStaffSession();
-  $('app').classList.add('hidden');
-  $('login').classList.remove('hidden');
-  $('loginError').textContent = 'انتهت صلاحية الجلسة. المرجو تسجيل الدخول من جديد.';
-}
-
-$('loginForm').addEventListener('submit', async event => {
-  event.preventDefault();
-  $('loginError').textContent = '';
-  const form = event.currentTarget;
-  const button = form.querySelector('button[type="submit"]');
-  const username = $('username').value.trim().toLowerCase();
-  const pin = $('pin').value.trim();
-
-  if (!/^[a-z0-9._-]{3,24}$/.test(username) || !/^\d{6}$/.test(pin)) {
-    $('loginError').textContent = 'أدخلي اسم المستخدم والرمز السري المكوّن من 6 أرقام.';
-    return;
-  }
-
-  button.disabled = true;
-  button.textContent = 'جارٍ الدخول…';
-  try {
-    const result = await api({ action: 'login_pin', username, pin });
-    staffSession = result.token;
-    sessionStorage.setItem('wida_staff_session', staffSession);
-    await enterStaffApp(result.staff?.display_name || username);
-    $('pin').value = '';
-  } catch (error) {
-    clearStaffSession();
-    $('loginError').textContent = 'اسم المستخدم أو الرمز السري غير صحيح، أو الحساب موقوف مؤقتاً.';
-  } finally {
-    button.disabled = false;
-    button.textContent = 'دخول';
-  }
-});
-
-async function loadOrders() {
-  if (busy) return;
-  busy = true;
-  $('message').textContent = 'جارٍ تحميل الطلبات…';
-  try {
-    const result = await api({ action: 'list_orders' });
-    orders = result.orders || [];
-    renderOrders();
-    $('message').textContent = 'تم تحديث الطلبات الآن.';
-  } catch (error) {
-    if (error.status === 401) return await expireStaffSession();
-    $('message').textContent = 'تعذر إتمام العملية. حاولي مرة أخرى.';
-  } finally {
-    busy = false;
-  }
-}
-
-function normalizeMoroccanPhone(value) {
-  let phone = String(value || '').replace(/[^\d]/g, '');
-  if (phone.startsWith('00')) phone = phone.slice(2);
-  if (phone.startsWith('0') && phone.length === 10) phone = '212' + phone.slice(1);
-  else if (phone.length === 9 && /^[5-7]/.test(phone)) phone = '212' + phone;
-  return phone;
-}
-
-function whatsappMessage(order) {
-  const name = String(order.customer_name || '').trim() || 'عزيزتي الزبونة';
-  const number = order.order_number || order.id || '';
-  const itemLines = (order.order_items || []).map(item =>
-    '• ' + String(item.product_name || 'منتج') +
-    (item.variant_name ? ' - ' + String(item.variant_name) : '') +
-    ' × ' + String(item.quantity || 1)
-  ).join('\n');
-  const total = Number(order.total || 0).toFixed(2);
-  if (order.status === 'new') {
-    return 'سلام ' + name + ' 🌸\n\n' +
-      'معاك Wida Jewls. توصلنا بالطلب ديالك ديال ' + (itemLines || 'المنتج') + '.\n\n' +
-      '💰 المجموع: ' + total + ' درهم شامل التوصيل.\n\n' +
-      'واش نأكدو ليك الطلب ونصيفطوه؟ 😊\n' +
-      'جاوبينا بـ «نعم» للتأكيد أو «إلغاء» إلا بدلتي رأيك.\n\n' +
-      'شكراً على ثقتك فينا ❤️';
-  }
-  return 'شكراً ' + name + ' ❤️\n\n' +
-    'طلبك تأكد بنجاح من Wida Jewls! 📦\n\n' +
-    'التوصيل متوقع خلال يوم إلى يومين إن شاء الله.\n\n' +
-    'عافاك خلي تلفونك قريب منك، وجاوبي على اتصال الموزع باش توصلك الطلبية بلا تأخير.\n\n' +
-    'نهارك مبروك 🌸';
-}
-
-function openOrderWhatsApp(orderId) {
-  const order = orders.find(item => item.id === orderId);
-  if (!order) return;
-  const phone = normalizeMoroccanPhone(order.phone);
-  if (!phone) {
-    $('message').textContent = 'رقم الهاتف غير صالح أو غير متوفر لهذا الطلب.';
-    return;
-  }
-  const url = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(whatsappMessage(order));
-  window.open(url, '_blank', 'noopener,noreferrer');
-}
-
-function statusLabel(status) {
-  return ({
-    new:'طلب جديد', confirmed:'تم التأكيد', processing:'قيد التجهيز',
-    shipped:'تم الشحن', delivered:'تم التسليم', cancelled:'ملغي', returned:'مرتجع'
-  })[status] || status || 'غير محدد';
-}
-
-function localOrderDate(value) {
-  return value ? new Intl.DateTimeFormat('en-CA', { timeZone:'Africa/Casablanca', year:'numeric', month:'2-digit', day:'2-digit' }).format(new Date(value)) : '';
-}
-function selectedOrderDate() {
-  if ($('orderDate').value) return $('orderDate').value;
-  if (dayMode === 'all') return '';
-  const date = new Date();
-  if (dayMode === 'yesterday') date.setDate(date.getDate() - 1);
-  return new Intl.DateTimeFormat('en-CA', { timeZone:'Africa/Casablanca', year:'numeric', month:'2-digit', day:'2-digit' }).format(date);
-}
-document.querySelectorAll('[data-day]').forEach(button => button.addEventListener('click', () => {
-  dayMode = button.dataset.day;
-  $('orderDate').value = '';
-  renderOrders();
-}));
-function renderOrders() {
-  const query = $('search').value.trim().toLowerCase();
-  const filter = $('filter').value;
-  const date = selectedOrderDate();
-  const rows = orders.filter(order =>
-    (!date || localOrderDate(order.created_at) === date) &&
-    (!filter || order.status === filter) &&
-    [order.order_number, order.customer_name, order.phone, order.city].join(' ').toLowerCase().includes(query)
-  );
-
-  $('orders').innerHTML = rows.map(order => {
-    const items = (order.order_items || []).map(item =>
-      '<div class="item"><span>' + esc(item.product_name) +
-      (item.variant_name ? ' · ' + esc(item.variant_name) : '') +
-      ' × ' + esc(item.quantity) + '</span><b>' +
-      Number(item.line_total || 0).toFixed(2) + ' درهم</b></div>'
-    ).join('');
-    const phone = String(order.phone || '').replace(/[^0-9+]/g, '');
-    const waButton = ['new','confirmed'].includes(order.status)
-      ? '<button class="whatsapp" onclick="openOrderWhatsApp(\'' + order.id + '\')">' +
-        (order.status === 'new' ? 'واتساب: طلب تأكيد الطلب' : 'واتساب: إرسال تأكيد الطلب') + '</button>'
-      : '';
-    const actions = order.status === 'new'
-      ? '<button class="green" onclick="handleOrder(\'' + order.id + '\',\'confirm\')">تأكيد في النظام</button>' +
-        '<button class="soft" onclick="handleOrder(\'' + order.id + '\',\'call_later\')">تذكير بالاتصال</button>' +
-        '<button class="red" onclick="handleOrder(\'' + order.id + '\',\'cancel\')">إلغاء</button>'
-      : order.status === 'confirmed'
-        ? '<button class="soft" onclick="handleOrder(\'' + order.id + '\',\'call_later\')">تذكير بالاتصال</button>'
-        : '';
-
-    return '<article class="card order">' +
-      '<div class="row between"><h2>الطلب رقم #' + esc(order.order_number) + '</h2>' +
-      '<span class="pill status-' + esc(order.status) + '">' + esc(statusLabel(order.status)) + '</span></div>' +
-      '<div class="muted small" style="margin-top:6px">تاريخ الطلب: ' + esc(localOrderDate(order.created_at)) + '</div>' +
-      '<p style="margin:9px 0 4px"><b>' + esc(order.customer_name) + '</b></p>' +
-      '<div class="muted">' + esc(order.phone) + ' · ' + esc(order.city || '') + '</div>' +
-      '<p style="margin:8px 0">' + esc(order.address || '') + '</p>' +
-      '<div class="items">' + (items || '<span class="muted">لا توجد تفاصيل للمنتجات</span>') + '</div>' +
-      '<div class="row between" style="margin-top:12px"><span class="muted">المبلغ عند الاستلام</span>' +
-      '<span class="total">' + Number(order.total || 0).toFixed(2) + ' درهم</span></div>' +
-      '<div class="actions"><a href="tel:' + esc(phone) + '" style="flex:1;text-decoration:none">' +
-      '<button class="soft" style="width:100%">اتصال بالزبونة</button></a>' + waButton + actions + '</div></article>';
-  }).join('') || '<div class="card muted">لا توجد طلبات مطابقة للتاريخ والحالة والبحث المحدد.</div>';
-}
-
-async function handleOrder(id, operation) {
-  if (busy) return;
-  const labels = {
-    confirm: 'هل أكدت الزبونة الطلب عبر واتساب أو الهاتف؟',
-    cancel: 'هل تريدين إلغاء هذا الطلب؟',
-    call_later: 'هل تريدين إضافة تذكير للاتصال بالزبونة بعد ساعتين؟'
-  };
-  if (!confirm(labels[operation])) return;
-  busy = true;
-  $('message').textContent = 'جارٍ حفظ التغيير…';
-  try {
-    await api({ action: 'handle_order', order_id: id, operation });
-    busy = false;
-    await loadOrders();
-    $('message').textContent = 'تم تحديث الطلب بنجاح ✓';
-  } catch (error) {
-    if (error.status === 401) await expireStaffSession();
-    else $('message').textContent = error.message;
-  } finally {
-    busy = false;
-  }
-}
-
-async function logout() {
-  try {
-    if (staffSession) await api({ action: 'logout_pin' });
-  } catch {}
-  clearStaffSession();
-  location.reload();
-}
-
-(async () => {
-  if (!staffSession) return;
-  try {
-    await enterStaffApp(staffDisplayName);
-  } catch {
-    clearStaffSession();
-  }
+(()=>{const cfg=window.WIDAJEWLS_SUPABASE;if(!cfg){document.getElementById('loginError').textContent='تعذر الاتصال بالخدمة.';return}const endpoint=cfg.url.replace(/\\/+$/,'')+'/functions/v1/staff-orders';const $=id=>document.getElementById(id);let staffSession=sessionStorage.getItem('wida_staff_session')||'',staffName=sessionStorage.getItem('wida_staff_name')||'',orders=[],tab='new',busy=false,dayMode='today';
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const money=v=>Number(v||0).toLocaleString('fr-MA',{maximumFractionDigits:2})+' DH';
+async function api(data,auth=staffSession){const headers={'Content-Type':'application/json','apikey':cfg.publishableKey};if(auth)headers['x-staff-session']=auth;const r=await fetch(endpoint,{method:'POST',headers,body:JSON.stringify(data),cache:'no-store'});const j=await r.json().catch(()=>({}));if(!r.ok||j.error){const e=new Error(j.error||'تعذر تنفيذ العملية');e.status=r.status;throw e}return j}
+function phone(v){let d=String(v||'').replace(/\\D/g,'');if(d.startsWith('00212'))d=d.slice(5);else if(d.startsWith('212'))d=d.slice(3);if(/^0[5-7]\\d{8}$/.test(d))return '212'+d.slice(1);if(/^[5-7]\\d{8}$/.test(d))return '212'+d;return ''}
+function localDate(v){return v?new Intl.DateTimeFormat('en-CA',{timeZone:'Africa/Casablanca',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(v)):''}
+function shiftDate(key,offset){const [y,m,d]=key.split('-').map(Number);const x=new Date(Date.UTC(y,m-1,d+offset));return x.toISOString().slice(0,10)}
+function selectedDate(){if($('orderDate').value)return $('orderDate').value;if(dayMode==='all')return '';const today=localDate(new Date().toISOString());return dayMode==='yesterday'?shiftDate(today,-1):today}
+function waUrl(o,type){const p=phone(o.phone);if(!p)return '#';const item=(o.order_items||[]).map(i=>i.product_name+' × '+i.quantity).join('، ')||'الطلب ديالك';let msg='';if(type==='new')msg='سلام '+(o.customer_name||'')+'، معاك Wida Jewls.\n\nطلبك: '+item+'\nالثمن: '+money(o.total)+'\n\nواش نأكدو الطلب؟\n✅ نعم، تأكيد\n❌ إلغاء\n\nشكراً على ثقتك فينا ❤️';else if(type==='confirmed')msg='طلبك تأكد بنجاح من Wida Jewls ❤️\n\nغادي توصلك الطلبية خلال 1 حتى لـ 2 أيام إن شاء الله. عافاك خلي تلفونك قريب منك وردّي على اتصال الموزع.\n\nشكراً على ثقتك فينا!';else msg='سلام '+(o.customer_name||'')+' ❤️\n\nطلبك من Wida Jewls خرج للتوصيل 🚚\n\nخلي تلفونك قريب منك وجاوبي على اتصال الموزع باش تستلمي الطلب.\n\nشكراً على ثقتك فينا 🌸';return 'https://wa.me/'+p+'?text='+encodeURIComponent(msg)}
+function statusLabel(s){return ({new:'طلب جديد',confirmed:'تم التأكيد',processing:'قيد التجهيز',shipped:'خرج للتوصيل',delivered:'تم التسليم',cancelled:'ملغى',returned:'مرتجع'})[s]||s||'غير محدد'}
+function render(){const q=$('search').value.trim().toLowerCase(),date=selectedDate();const list=orders.filter(o=>(!date||localDate(o.created_at)===date)&&(tab==='all'||o.status===tab)&&(!q||[o.order_number,o.customer_name,o.phone,o.city].join(' ').toLowerCase().includes(q)));$('resultCount').textContent=list.length+' طلب';$('orders').innerHTML=list.length?list.map(o=>{const isNew=o.status==='new',waType=o.status==='new'?'new':o.status==='confirmed'?'confirmed':'shipped';const waLabel=o.status==='new'?'WhatsApp · مراجعة وإرسال':o.status==='confirmed'?'WhatsApp · رسالة التأكيد':'WhatsApp · رسالة للزبونة';const actions=isNew?'<div class="actions"><button class="confirm" data-action="confirm" data-id="'+esc(o.id)+'">✓ تأكيد</button><button class="cancel" data-action="cancel" data-id="'+esc(o.id)+'">إلغاء</button><button class="later" data-action="call_later" data-id="'+esc(o.id)+'">اتصال لاحقاً</button></div>':o.status==='confirmed'?'<div class="actions"><button class="later" data-action="call_later" data-id="'+esc(o.id)+'">اتصال لاحقاً</button></div>':'';return '<article class="card"><div class="orderhead"><b class="muted">طلب #'+esc(o.order_number)+'</b><span class="pill">'+esc(statusLabel(o.status))+'</span></div><div class="muted" style="font-size:12px;margin-bottom:8px">تاريخ الطلب: '+esc(localDate(o.created_at))+'</div><div class="name">'+esc(o.customer_name)+'</div><div class="grid"><div class="info"><small>الهاتف</small><b dir="ltr">'+esc(o.phone||'—')+'</b></div><div class="info"><small>المدينة</small><b>'+esc(o.city||'—')+'</b></div><div class="info wide"><small>العنوان</small><b>'+esc(o.address||'—')+'</b></div></div><div class="items">'+((o.order_items||[]).map(i=>'<div class="item"><span>'+esc(i.product_name)+(i.variant_name?' · '+esc(i.variant_name):'')+' × '+esc(i.quantity)+'</span><b>'+money(i.line_total)+'</b></div>').join('')||'<span class="muted">تفاصيل المنتجات غير متوفرة</span>')+'</div><div class="total"><span>المجموع</span><span>'+money(o.total)+'</span></div><div class="links"><a class="link call" href="tel:'+esc(phone(o.phone))+'">☎ اتصال</a><a class="link wa" target="_blank" rel="noopener" href="'+esc(waUrl(o,waType))+'">'+waLabel+'</a></div>'+actions+'</article>'}).join(''):'<section class="card empty">ما كاين حتى طلب فهاد اللائحة حالياً.</section>'}
+async function load(){if(busy)return;busy=true;$('message').textContent='جاري تحديث الطلبات…';try{const d=await api({action:'list_orders'});orders=d.orders||[];if(d.staff?.display_name){staffName=d.staff.display_name;sessionStorage.setItem('wida_staff_name',staffName);$('staffName').textContent=staffName}render();$('message').textContent='آخر تحديث: '+new Date().toLocaleTimeString('fr-MA')}catch(e){if(e.status===401){await expire();return}$('message').textContent=e.message}finally{busy=false}}
+async function enter(){try{const d=await api({action:'list_orders'});orders=d.orders||[];$('staffName').textContent=staffName||d.staff?.display_name||'فريق الطلبات';$('login').classList.add('hidden');$('app').classList.remove('hidden');$('logout').classList.remove('hidden');render();$('message').textContent='تم تسجيل الدخول بنجاح'}catch(e){if(e.status===401)clearSession();$('loginError').textContent=e.message}}
+function clearSession(){staffSession='';staffName='';sessionStorage.removeItem('wida_staff_session');sessionStorage.removeItem('wida_staff_name')}
+async function expire(){clearSession();$('app').classList.add('hidden');$('logout').classList.add('hidden');$('login').classList.remove('hidden');$('loginError').textContent='انتهت الجلسة. دخلي من جديد.'}
+function logout(){if(staffSession)api({action:'logout_pin'}).catch(()=>{});clearSession();location.reload()}
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();$('loginBtn').disabled=true;$('loginError').textContent='';try{const d=await api({action:'login_pin',username:$('username').value.trim().toLowerCase(),pin:$('pin').value},'');staffSession=d.token;staffName=d.staff?.display_name||$('username').value;sessionStorage.setItem('wida_staff_session',staffSession);sessionStorage.setItem('wida_staff_name',staffName);$('pin').value='';await enter()}catch(err){$('loginError').textContent=err.message}finally{$('loginBtn').disabled=false}});
+$('logout').addEventListener('click',logout);$('refresh').addEventListener('click',load);$('search').addEventListener('input',render);
+document.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>{dayMode=b.dataset.day;$('orderDate').value='';document.querySelectorAll('[data-day]').forEach(x=>x.classList.toggle('active',x===b));render()}));
+$('orderDate').addEventListener('change',()=>{dayMode='custom';document.querySelectorAll('[data-day]').forEach(x=>x.classList.remove('active'));render()});
+$('tabs').addEventListener('click',e=>{const b=e.target.closest('[data-status]');if(!b)return;tab=b.dataset.status;document.querySelectorAll('#tabs .tab').forEach(x=>x.classList.toggle('active',x===b));render()});
+$('orders').addEventListener('click',async e=>{const b=e.target.closest('[data-action]');if(!b||busy)return;const action=b.dataset.action,id=b.dataset.id;const prompts={confirm:'واش تأكد هاد الطلب مع الزبونة؟',cancel:'واش متأكدة بغيتي تلغي هاد الطلب؟',call_later:'نضيفو هاد الطلب للاتصال لاحقاً؟'};if(!confirm(prompts[action]))return;const order=orders.find(o=>String(o.id)===String(id));if(action==='confirm'&&order){const url=waUrl(order,'confirmed');if(url!=='#')window.open(url,'_blank','noopener,noreferrer')}busy=true;b.disabled=true;try{await api({action:'handle_order',order_id:id,operation:action});await load();$('message').textContent=action==='confirm'?'تأكد الطلب، ورسالة التأكيد واجدة فـ WhatsApp.':'تم حفظ التغيير.'}catch(err){$('message').textContent=err.message}finally{busy=false}});
+if(staffSession)enter();
 })();
-</script>
-</body></html>
+</script></body></html>
