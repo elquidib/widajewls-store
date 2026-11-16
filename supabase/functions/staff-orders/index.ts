@@ -36,16 +36,21 @@ Deno.serve(async (req: Request) => {
       .select("id,order_number,customer_name,phone,city,address,total,status,created_at,order_items(id,product_name,quantity,line_total,variant_name)")
       .order("created_at", { ascending: false }).limit(250);
     if (error) return reply({ error: "Could not load orders" }, 500);
-    return reply({ orders: data || [] });
+    const { data: followups, error: followupError } = await db.from("order_followups").select("order_id,workflow_status,follow_up_at,updated_at").eq("workflow_status", "call_later");
+    if (followupError) return reply({ error: "Could not load follow-up orders" }, 500);
+    return reply({ orders: data || [], followups: followups || [] });
   }
   if (action === "handle_order") {
     const orderId = String(body?.order_id || "");
     const operation = String(body?.operation || "");
     if (!/^[0-9a-f-]{36}$/i.test(orderId)) return reply({ error: "Invalid order" }, 400);
-    if (!["confirm", "cancel", "call_later"].includes(operation)) return reply({ error: "Invalid action" }, 400);
+    if (!["confirm", "cancel", "call_later", "clear_call_later"].includes(operation)) return reply({ error: "Invalid action" }, 400);
     const { data: order } = await db.from("orders").select("id").eq("id", orderId).maybeSingle();
     if (!order) return reply({ error: "Order not found" }, 404);
-    if (operation === "confirm" || operation === "cancel") {
+    if (operation === "clear_call_later") {
+      const { error } = await db.from("order_followups").delete().eq("order_id", orderId).eq("workflow_status", "call_later");
+      if (error) return reply({ error: "Could not clear follow-up reminder" }, 500);
+    } else if (operation === "confirm" || operation === "cancel") {
       const status = operation === "confirm" ? "confirmed" : "cancelled";
       const { error } = await db.from("orders").update({ status, updated_at: new Date().toISOString() }).eq("id", orderId);
       if (error) return reply({ error: "Could not update order status" }, 500);
@@ -58,7 +63,7 @@ Deno.serve(async (req: Request) => {
       }, { onConflict: "order_id" });
       if (error) return reply({ error: "Could not save call-back reminder" }, 500);
     }
-    const auditAction = operation === "confirm" ? "confirmed" : operation === "cancel" ? "cancelled" : "call_later";
+    const auditAction = operation === "confirm" ? "confirmed" : operation === "cancel" ? "cancelled" : operation === "clear_call_later" ? "follow_up_completed" : "call_later";
     const { error: auditError } = await db.from("staff_order_audit").insert({
       order_id: orderId, staff_user_id: isAdmin ? null : actor.id, actor_user_id: actor.id,
       action: auditAction, details: operation === "call_later" ? { follow_up_at: body?.follow_up_at || null } : {}
