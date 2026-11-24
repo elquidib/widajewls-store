@@ -1751,6 +1751,22 @@ function fastSupabaseImage(src,width=1200,height=1200,quality=78){
     if(u.hostname.endsWith("supabase.co")){
       const objectPath="/storage/v1/object/public/";
       const renderPath="/storage/v1/render/image/public/";
+      // Product and site assets are already pre-compressed WebP files
+      // (about 94 KB average in production). Serve them directly so routine
+      // storefront views do not consume Supabase image-transformation quota.
+      if(u.pathname.includes(renderPath)&&u.pathname.toLowerCase().endsWith(".webp")){
+        u.pathname=u.pathname.replace(renderPath,objectPath);
+        u.search="";
+        u.hash="";
+        return u.toString();
+      }
+      if(u.pathname.includes(objectPath)&&u.pathname.toLowerCase().endsWith(".webp")){
+        u.search="";
+        u.hash="";
+        return u.toString();
+      }
+      // Keep on-the-fly optimization for legacy non-WebP assets such as the
+      // existing large PNG product image.
       if(u.pathname.includes(objectPath)){
         u.pathname=u.pathname.replace(objectPath,renderPath);
       }
