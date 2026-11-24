@@ -1507,6 +1507,14 @@ html{scroll-behavior:smooth;scroll-padding-top:92px}
 @media(max-width:800px){.hero{min-height:min(740px,80svh)}.hero:before{background:linear-gradient(0deg,rgba(20,18,15,.68),rgba(20,18,15,.04) 86%)}.hero-inner{align-self:end;padding:68px 20px 48px}.hero h1{font-size:clamp(42px,12vw,70px)}.section{padding-block:56px}.grid{gap:11px}.card-media{border-radius:2px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero-media img,.hero-inner,.topbar{animation:none}.card-media img,.story-visual,.btn,.iconbtn,.thumb{transition:none}.card:hover .card-media img,.story:hover .story-visual,.thumb:hover{transform:none}}
 </style>
+<style id="wida-2027-scroll-reveal">
+.wida-reveal{opacity:0;transform:translateY(22px);transition:opacity .82s cubic-bezier(.22,.68,0,1.02),transform .82s cubic-bezier(.22,.68,0,1.02)}
+.wida-reveal.is-visible{opacity:1;transform:none}
+.card.wida-reveal{transition-duration:.72s}
+.wida-scroll-progress{position:fixed;top:0;left:0;width:0;height:2px;z-index:1200;background:linear-gradient(90deg,#9b773d,#E5D2A3,#C9A45C);pointer-events:none;transition:width .08s linear}
+.header.is-scrolled{box-shadow:0 8px 28px rgba(28,28,28,.055)}
+@media(prefers-reduced-motion:reduce){.wida-reveal,.wida-reveal.is-visible{opacity:1;transform:none;transition:none}.wida-scroll-progress{display:none}}
+</style>
 </head>
 <body>
 <div id="app"></div>
@@ -2156,7 +2164,7 @@ function initWidaMotion(){
  if(!window.__widaScrollUiBound){window.addEventListener("scroll",update,{passive:true});window.addEventListener("resize",update,{passive:true});window.__widaScrollUiBound=true}
  update();
  if(reduced||!("IntersectionObserver" in window))return;
- const targets=[...document.querySelectorAll(".section,.story,.reviews,.recommendations,.faq,.newsletter,.card")];
+ const targets=[...document.querySelectorAll(".section,.story,.reviews,.recommendations,.faq,.newsletter,.card,.trust,.product-layout,.checkout")];
  const observer=new IntersectionObserver(entries=>{
   entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("is-visible");observer.unobserve(entry.target)}});
  },{threshold:.08,rootMargin:"0px 0px -35px 0px"});
