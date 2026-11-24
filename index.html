@@ -1472,6 +1472,41 @@ body.wida-variant-modal-open{overflow:hidden}
 body.wida-lightbox-open{overflow:hidden}
 @media(max-width:600px){.wida-product-lightbox{padding:16px}.wida-lightbox-image{max-width:100%;max-height:82svh}.wida-lightbox-arrow{width:38px;height:38px}.wida-lightbox-arrow.prev{left:10px}.wida-lightbox-arrow.next{right:10px}.wida-lightbox-close{top:12px;right:12px}}
 </style>
+<style id="wida-2027-luxury-motion">
+:root{--wida-ease:cubic-bezier(.22,.68,0,1.02);--wida-gold:#C9A45C;--wida-gold-soft:#E5D2A3}
+html{scroll-behavior:smooth;scroll-padding-top:92px}
+.hero{isolation:isolate;min-height:clamp(590px,78svh,850px)}
+.hero:before{background:linear-gradient(90deg,rgba(20,18,15,.78) 0%,rgba(20,18,15,.48) 36%,rgba(20,18,15,.06) 76%,rgba(20,18,15,.02) 100%)}
+.hero-media img{transform:scale(1.035);animation:widaHeroSettle 1.6s var(--wida-ease) both}
+.hero-inner{animation:widaCopyRise .95s .12s var(--wida-ease) both}
+.hero h1{text-wrap:balance;text-shadow:0 8px 32px rgba(0,0,0,.16)}
+.section{padding-block:clamp(62px,7.5vw,100px)}
+.section-head{margin-bottom:clamp(24px,3vw,40px)}
+.card-media{border-radius:3px;overflow:hidden;background:linear-gradient(145deg,#fffdf8,#f3eadc)}
+.card-media img{transition:transform .9s var(--wida-ease),filter .6s ease;will-change:transform}
+@media(hover:hover){.card:hover .card-media img{transform:scale(1.055);filter:saturate(1.04)}.card-media:after{background:linear-gradient(180deg,rgba(201,164,92,.08),transparent 48%,rgba(28,28,28,.035))}.navlinks a,.navlinks button{transition:color .25s ease,opacity .25s ease}.navlinks a:hover,.navlinks button:hover{color:#9b773d;opacity:.85}}
+.btn{transition:transform .28s var(--wida-ease),box-shadow .28s ease,background-color .28s ease,border-color .28s ease}
+.btn:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(28,28,28,.14)}
+.iconbtn{transition:transform .25s var(--wida-ease),border-color .25s ease,background-color .25s ease}
+.iconbtn:hover{transform:translateY(-2px);border-color:var(--wida-gold)}
+.product-layout{align-items:start}
+.main-image{overflow:hidden}
+.main-image img{transition:transform .65s var(--wida-ease),opacity .3s ease}
+@media(hover:hover){.main-image:hover img{transform:scale(1.035)}}
+.thumb{transition:border-color .25s ease,transform .25s var(--wida-ease),box-shadow .25s ease}
+.thumb:hover{transform:translateY(-2px);border-color:var(--wida-gold);box-shadow:0 5px 18px rgba(28,28,28,.08)}
+.gallery-arrow,.wida-lightbox-arrow,.wida-lightbox-close{transition:transform .22s var(--wida-ease),background-color .22s ease,border-color .22s ease}
+.story{overflow:hidden}
+.story-visual{transition:transform 1.25s var(--wida-ease)}
+.story:hover .story-visual{transform:scale(1.02)}
+.topbar{background:linear-gradient(100deg,#1c1c1c,#28231b 50%,#1c1c1c);background-size:180% 100%;animation:widaGoldDrift 12s ease-in-out infinite}
+.cart-panel{backdrop-filter:saturate(1.05)}
+@keyframes widaHeroSettle{from{transform:scale(1.08);filter:brightness(.9)}to{transform:scale(1.035);filter:brightness(1)}}
+@keyframes widaCopyRise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes widaGoldDrift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@media(max-width:800px){.hero{min-height:min(740px,80svh)}.hero:before{background:linear-gradient(0deg,rgba(20,18,15,.68),rgba(20,18,15,.04) 86%)}.hero-inner{align-self:end;padding:68px 20px 48px}.hero h1{font-size:clamp(42px,12vw,70px)}.section{padding-block:56px}.grid{gap:11px}.card-media{border-radius:2px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero-media img,.hero-inner,.topbar{animation:none}.card-media img,.story-visual,.btn,.iconbtn,.thumb{transition:none}.card:hover .card-media img,.story:hover .story-visual,.thumb:hover{transform:none}}
+</style>
 </head>
 <body>
 <div id="app"></div>
